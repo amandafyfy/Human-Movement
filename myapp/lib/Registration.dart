@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import './Login.dart';
 
 class account_Info {
   final String? userName;
   final String? pwd;
+  final String? email;
 
-  const account_Info(this.userName, this.pwd);
+  const account_Info(this.userName, this.pwd, this.email);
 }
 
 class Registration extends StatefulWidget {
-  //final account_Info info;
   const Registration({Key? key}) : super(key: key);
 
   @override
@@ -16,6 +18,10 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
+  String? name;
+  String? password;
+  String? repassword;
+  String? email;
 
   TextEditingController _unameController = new TextEditingController();
   TextEditingController _pwdController = new TextEditingController();
@@ -53,8 +59,12 @@ class _RegistrationState extends State<Registration> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter User name';
+                    }else{
+                      name = value;
+                      //debugPrint('name: $name');
+                      return null;
                     }
-                    return null;
+
                   },
                 ),
 
@@ -66,13 +76,27 @@ class _RegistrationState extends State<Registration> {
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Password:',
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.lock),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                            pwdShow ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            pwdShow = !pwdShow;
+                          });
+                        },
+                      )
                   ),
+                  obscureText: !pwdShow,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter password';
+                    }else{
+                      password = value;
+                      //debugPrint('password: $password');
+                      return null;
                     }
-                    return null;
+
                   },
                 ),
 
@@ -84,11 +108,13 @@ class _RegistrationState extends State<Registration> {
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Confirm Password:',
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.lock),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please re-enter password';
+                    }else if (password != value){
+                      return 'password does not match';
                     }
                     return null;
                   },
@@ -102,15 +128,39 @@ class _RegistrationState extends State<Registration> {
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Email:',
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.email),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter User name';
+                    }else{
+                      email = value;
+                      //debugPrint('email: $email');
+                      return null;
                     }
-                    return null;
                   },
                 ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 25),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints.expand(height: 55.0),
+                    child: ElevatedButton(
+                      //style: style,
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          account_Info info = account_Info(
+                              name, password, email);
+                          Navigator.push(
+                              context, MaterialPageRoute(
+                              builder: (context) => Login(info: info)));
+                        }
+                      },
+                      child: const Text('Create'),
+                    ),
+                  ),
+                ),
+
               ]
           )
         )

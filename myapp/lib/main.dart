@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import './Login.dart';
 import './Registration.dart';
+import './Setting.dart';
 
 /**class Data {
   String? date;
@@ -18,6 +19,7 @@ import './Registration.dart';
     this.place_class = place_class;
   }
 }*/
+
 
 
 void main() {
@@ -66,11 +68,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   Position _currentPosition = new Position();
   String _currentAddress = "Unkonwn";
   String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(DateTime.now());
   int _selectedIndex = 1;
+  final account_Info default_info = new account_Info("","","");
 
   @override
   void initState() {
@@ -200,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Then close the drawer
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Login()),
+                  MaterialPageRoute(builder: (context) => Login(info: default_info)),
                 );
               },
             ),
@@ -210,19 +214,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-
-            ListTile(
-              title: const Text('Registration'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Registration()),
+                  MaterialPageRoute(builder: (context) => Setting(curposition: _currentPosition)),
                 );
               },
             ),
