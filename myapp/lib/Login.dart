@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './Registration.dart';
 
 class Login extends StatefulWidget {
+
   const Login({Key? key, required this.info}) : super(key: key);
   final account_Info info;
 
@@ -38,9 +39,9 @@ class _LoginState extends State<Login> {
                 autocorrect: true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter your username:',
-                  prefixIcon: Icon(Icons.person),
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter your username:',
+                    prefixIcon: Icon(Icons.person),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -55,9 +56,9 @@ class _LoginState extends State<Login> {
                 autocorrect: true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Enter your password:',
-                    prefixIcon: Icon(Icons.lock),
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your password:',
+                  prefixIcon: Icon(Icons.lock),
                     suffixIcon: IconButton(
                       icon: Icon(
                           pwdShow ? Icons.visibility_off : Icons.visibility),
@@ -66,19 +67,21 @@ class _LoginState extends State<Login> {
                           pwdShow = !pwdShow;
                         });
                       },
-                    )),
-                obscureText: !pwdShow,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter User name';
-                  }
-                  return null;
-                },
+                    )
+                ),
+              obscureText: !pwdShow,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter User name';
+                }
+                return null;
+              },
               ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 25),
                 child: new Column(
-                  //constraints: BoxConstraints.expand(height: 55.0), TEST
+                  //constraints: BoxConstraints.expand(height: 55.0),
                   children: [
                     new Container(
                       constraints: BoxConstraints.expand(height: 55.0),
@@ -92,8 +95,8 @@ class _LoginState extends State<Login> {
                         child: const Text('Log In'),
                       ),
                     ),
-                    new Container(
-                      constraints: BoxConstraints.expand(height: 55.0),
+                  new Container(
+                    constraints: BoxConstraints.expand(height: 55.0),
                       child: TextButton(
                           style: TextButton.styleFrom(
                             textStyle: const TextStyle(fontSize: 20),
@@ -101,14 +104,14 @@ class _LoginState extends State<Login> {
                           child: const Text('Create new account'),
                           onPressed: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Registration()));
-                          }),
+                                context, MaterialPageRoute(builder: (context) => Registration()));
+                          }
+                      ),
                     ),
                   ],
                 ),
               ),
+
             ],
           ),
         ),
