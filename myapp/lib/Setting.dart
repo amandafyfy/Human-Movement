@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:carp_background_location/carp_background_location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key, required this.curposition}) : super(key: key);
-  final Position curposition;
+  final LocationDto curposition;
 
 
   @override
