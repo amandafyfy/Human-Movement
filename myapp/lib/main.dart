@@ -5,23 +5,9 @@ import 'package:intl/intl.dart';
 import './Login.dart';
 import './Registration.dart';
 import './Setting.dart';
-//import rekab.app.background_locator.LocatorService;
+import './UserData.dart';
 
 const fetchBackground = "fetchBackground";
-/**class Data {
-  String? date;
-  double? longitude;
-  double? latitude;
-  String? place_class;
-  //constructor
-  Data(String date, double longitude, double latitude, String place_class){
-    this.date = date;
-    this.longitude = longitude;
-    this.latitude = latitude;
-    this.place_class = place_class;
-  }
-}*/
-
 
 
 void main() {
@@ -72,7 +58,7 @@ class MyHomePage extends StatefulWidget {
 enum LocationStatus { UNKNOWN, RUNNING, STOPPED }
 
 String dtoToString(LocationDto dto) =>
-    'Location ${dto.latitude}, ${dto.longitude} at ${dto.time}';
+    'Location ${dto.latitude}, ${dto.longitude} at ${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}';
 
 Widget dtoWidget(LocationDto? dto) {
 
@@ -87,7 +73,7 @@ Widget dtoWidget(LocationDto? dto) {
         Text(
           '@',
         ),
-        Text('${dto.time}')
+        Text('${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}')
       ],
     );
 }
@@ -102,13 +88,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Stream<LocationDto>? locationStream;
   StreamSubscription<LocationDto>? locationSubscription;
   LocationStatus _status = LocationStatus.UNKNOWN;
+  List<DataPoint> UserData = [];
 
   @override
   void initState() {
     super.initState();
-
     // Subscribe to stream in case it is already running
-    LocationManager().interval = 1;
+    LocationManager().interval = 60;
     LocationManager().distanceFilter = 0;
     LocationManager().notificationTitle = 'CARP Location Example';
     LocationManager().notificationMsg = 'CARP is tracking your location';
@@ -116,9 +102,16 @@ class _MyHomePageState extends State<MyHomePage> {
     locationSubscription = locationStream?.listen(onData);
   }
 
-  void onGetCurrentLocation() async {
-    LocationDto dto = await LocationManager().getCurrentLocation();
-    print('Current location: $dto');
+  void setDatapoint(LocationDto dto){
+    String time = DateTime.fromMillisecondsSinceEpoch(dto.time.toInt()).toString();
+    DataPoint segment = new DataPoint(time, dto.longitude, dto.latitude, dto.speed);
+    UserData.add(segment);
+  }
+
+  void onGetCurrentData() async {
+    //LocationDto dto = await LocationManager().getCurrentLocation();
+    UserData.forEach((element) => print(element.toString()));
+    UserData.clear();
   }
 
   void onData(LocationDto dto) {
@@ -129,8 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       lastLocation = dto;
       print(dto.latitude);
-      print( dto.longitude);
+      print(dto.longitude);
       lastTimeLocation = DateTime.now();
+      setDatapoint(dto);
     });
   }
 
@@ -192,8 +186,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget getButton() {
     return ElevatedButton(
-      child: Text("Get Current Location"),
-      onPressed: onGetCurrentLocation,
+      child: Text("Get Current Data collection"),
+      onPressed: onGetCurrentData,
     );
   }
 
