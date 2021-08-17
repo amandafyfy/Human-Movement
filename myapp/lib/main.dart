@@ -198,7 +198,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("MAIN PAGE"),
@@ -283,6 +282,17 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
 
+            ListTile(
+              title: const Text('Dialog'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Dialog()),
+                );
+              },
+            ),
           ],
         ),
       ),
