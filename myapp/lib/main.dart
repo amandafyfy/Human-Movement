@@ -73,7 +73,7 @@ Widget dtoWidget(LocationDto? dto) {
         Text(
           '@',
         ),
-        Text('${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}')
+        //Text('${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}')
       ],
     );
 }
