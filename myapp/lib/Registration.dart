@@ -60,6 +60,7 @@ class _RegistrationState extends State<Registration> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter User name';
                     }else{
+                      //@lovedeep this is the name input
                       name = value;
                       //debugPrint('name: $name');
                       return null;
@@ -92,6 +93,7 @@ class _RegistrationState extends State<Registration> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter password';
                     }else{
+                      //@lovedeep this is password input
                       password = value;
                       //debugPrint('password: $password');
                       return null;
@@ -134,6 +136,7 @@ class _RegistrationState extends State<Registration> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter User name';
                     }else{
+                      //@lovedeep this is the email input
                       email = value;
                       //debugPrint('email: $email');
                       return null;

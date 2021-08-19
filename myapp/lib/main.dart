@@ -6,6 +6,10 @@ import './Login.dart';
 import './Registration.dart';
 import './Setting.dart';
 import './UserData.dart';
+import 'package:csv/csv.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:convert';
 
 const fetchBackground = "fetchBackground";
 
@@ -102,13 +106,47 @@ class _MyHomePageState extends State<MyHomePage> {
     locationSubscription = locationStream?.listen(onData);
   }
 
+  void _generateCsvFile() async{
+    List<List<dynamic>> rows = [];
+
+    List<dynamic> row = [];
+    row.add("date");
+    row.add("latitude");
+    row.add("longitude");
+    row.add("speed");
+    rows.add(row);
+
+    for (int i = 0; i < UserData.length; i++) {
+      List<dynamic> row = [];
+      row.add(UserData[i].date);
+      row.add(UserData[i].latitude);
+      row.add(UserData[i].longitude);
+      row.add(UserData[i].speed);
+      rows.add(row);
+    }
+
+    String csv = const ListToCsvConverter().convert(rows);
+
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path+"/user.csv";
+    print("path:" + path);
+
+    File file = File(path);
+    file.writeAsString(csv);
+
+    final input = new File(path).openRead();
+    final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
+    print(fields);
+
+  }
+
   void setDatapoint(LocationDto dto){
     String time = DateTime.fromMillisecondsSinceEpoch(dto.time.toInt()).toString();
     DataPoint segment = new DataPoint(time, dto.longitude, dto.latitude, dto.speed);
     UserData.add(segment);
   }
 
-  void onGetCurrentData() async {
+  void onGetCurrentData(){
     //LocationDto dto = await LocationManager().getCurrentLocation();
     UserData.forEach((element) => print(element.toString()));
     UserData.clear();
@@ -278,6 +316,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
+                _generateCsvFile();
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               },
             ),

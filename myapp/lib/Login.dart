@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
                     labelText: 'Enter your username:',
                     prefixIcon: Icon(Icons.person),
                 ),
+                //lovedeep this is where username. it should exist in our db.
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter User name';
@@ -70,6 +71,7 @@ class _LoginState extends State<Login> {
                     )
                 ),
               obscureText: !pwdShow,
+              //lovedeep this is the password, it should match our database.
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter User name';
