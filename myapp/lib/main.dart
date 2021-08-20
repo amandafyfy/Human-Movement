@@ -6,6 +6,7 @@ import './Login.dart';
 import './Registration.dart';
 import './Setting.dart';
 import './UserData.dart';
+import './UserInfo.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
