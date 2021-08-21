@@ -11,6 +11,9 @@ import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'package:path/path.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 const fetchBackground = "fetchBackground";
 class location {
@@ -22,6 +25,9 @@ class location {
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
+  
   runApp(MyApp());
 }
 
@@ -210,6 +216,20 @@ class _MyHomePageState extends State<MyHomePage> {
     await LocationManager().stop();
   }
 
+  // @Cathyling
+  // user upload the csv file
+  void uploadFile() async {
+    final directory =  await getApplicationDocumentsDirectory();
+    final path = directory.path +"/user.csv";
+
+    File file = File(path);
+    final fileName = basename(file.path);
+    final destination = 'files/$fileName';
+    print(path);
+    Reference storageReference = FirebaseStorage.instance.ref().child("$destination");
+    final UploadTask uploadTask = storageReference.putFile(file);
+  }
+
   Widget stopButton() {
     String msg = 'STOP';
 
@@ -379,6 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // ...
                 // Then close the drawer
                 _generateCsvFile();
+                uploadFile();
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               },
             ),
