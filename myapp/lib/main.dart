@@ -105,15 +105,16 @@ class _MyHomePageState extends State<MyHomePage> {
     locationStream = LocationManager().locationStream;
     locationSubscription = locationStream?.listen(onData);
   }
-
-  void _generateCsvFile() async{
-    List<List<dynamic>> rows = [];
-
+  void add_head(List<List<dynamic>> rows){
     List<dynamic> row = [];
     row.add("date");
     row.add("latitude");
     row.add("longitude");
     row.add("speed");
+    rows.add(row);
+  }
+  void add_context(List<List<dynamic>> rows){
+    List<dynamic> row = [];
     rows.add(row);
 
     for (int i = 0; i < UserData.length; i++) {
@@ -124,19 +125,32 @@ class _MyHomePageState extends State<MyHomePage> {
       row.add(UserData[i].speed);
       rows.add(row);
     }
+  }
+  void _generateCsvFile() async{
+    List<List<dynamic>> rows = [];
 
-    String csv = const ListToCsvConverter().convert(rows);
-
+    String csv = "";
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path+"/user.csv";
     print("path:" + path);
 
     File file = File(path);
-    file.writeAsString(csv);
+    if(await file.exists()){
+      add_context(rows);
+      csv = const ListToCsvConverter().convert(rows);
+      await file.writeAsString(csv, mode: FileMode.append);
+      UserData.clear();
+    }else{
+      add_head(rows);
+      add_context(rows);
+      csv = const ListToCsvConverter().convert(rows);
+      await file.writeAsString(csv);
+    }
 
     final input = new File(path).openRead();
     final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
     print(fields);
+    //await file.delete();
 
   }
 

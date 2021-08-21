@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import './Setting.dart';
+import 'package:csv/csv.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:convert';
 
 class MarkerForm extends StatefulWidget {
 
@@ -17,6 +20,58 @@ class _MarkerFormState extends State<MarkerForm> {
   TextEditingController _Activity2Controller = new TextEditingController();
   TextEditingController _Activity3Controller = new TextEditingController();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
+  void add_head(List<List<dynamic>> rows){
+    List<dynamic> row = [];
+    row.add("longitude");
+    row.add("latitude");
+    row.add("locationName");
+    row.add("Activity 1");
+    row.add("Activity 2");
+    row.add("Activity 3");
+    rows.add(row);
+  }
+
+  void add_context(List<List<dynamic>> rows, LatLng latlang, String locationName, String Activ1, String Activ2, String Activ3){
+    List<dynamic> row = [];
+    List<dynamic> empty = [];
+    rows.add(empty);
+
+    row.add(latlang.longitude);
+    row.add(latlang.latitude);
+    row.add(locationName);
+    row.add(Activ1);
+    row.add(Activ2);
+    row.add(Activ3);
+    rows.add(row);
+  }
+
+  void _recordvalue(LatLng latlang, String locationName, String Activ1, String Activ2, String Activ3) async{
+    List<List<dynamic>> rows = [];
+
+    String csv = "";
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path+"/locations.csv";
+    print("path:" + path);
+
+    File file = File(path);
+    if(await file.exists()){
+      add_context(rows, latlang, locationName, Activ1, Activ2, Activ3);
+      csv = const ListToCsvConverter().convert(rows);
+      await file.writeAsString(csv, mode: FileMode.append);
+    }else{
+      add_head(rows);
+      add_context(rows, latlang, locationName, Activ1, Activ2, Activ3);
+      csv = const ListToCsvConverter().convert(rows);
+      await file.writeAsString(csv);
+    }
+
+    final input = new File(path).openRead();
+    final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
+    print(fields);
+
+    await file.delete();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +159,7 @@ class _MarkerFormState extends State<MarkerForm> {
                     //style: style,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
+                        _recordvalue(latlang, _locationnameController.text, _Activity1Controller.text, _Activity2Controller.text, _Activity3Controller.text);
                         Navigator.of(context).pop();
                       }
                     },
