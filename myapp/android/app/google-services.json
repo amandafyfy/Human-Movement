@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "981740289309",
+    "project_id": "human-movement-308d9",
+    "storage_bucket": "human-movement-308d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981740289309:android:b24a59aeb6ffc193c4f5f4",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981740289309-l9u79mhiacu04marp0669rohdikcomh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWLIbLB4haNyCmpAF8NJpB39ieXteWQGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981740289309-l9u79mhiacu04marp0669rohdikcomh2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
