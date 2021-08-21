@@ -6,6 +6,7 @@ import './Login.dart';
 import './Registration.dart';
 import './Setting.dart';
 import './UserData.dart';
+import './UserInfo.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -308,6 +309,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Login(info: default_info)),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('User Info'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserInfo()),
                 );
               },
             ),
