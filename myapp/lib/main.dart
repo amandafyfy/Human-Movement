@@ -13,6 +13,12 @@ import 'dart:io';
 import 'dart:convert';
 
 const fetchBackground = "fetchBackground";
+class location {
+  double longitude;
+  double latitude;
+
+  location(this.longitude, this.latitude);
+}
 
 
 void main() {
@@ -88,7 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final account_Info default_info = new account_Info("","","");
   String logStr = '';
-  LocationDto lastLocation = LocationDto.fromJson({ "key1":"value1"});
+  LocationDto lastLocation = LocationDto.fromJson({ "key":"value"});
+  location thislocation = location(115.857048,-31.953512);
   DateTime? lastTimeLocation;
   Stream<LocationDto>? locationStream;
   StreamSubscription<LocationDto>? locationSubscription;
@@ -179,6 +186,8 @@ class _MyHomePageState extends State<MyHomePage> {
       lastTimeLocation = DateTime.now();
       setDatapoint(dto);
     });
+    thislocation.longitude = dto.longitude;
+    thislocation.latitude = dto.latitude;
   }
 
   void start() async {
@@ -244,6 +253,32 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget deleteButton() {
+    return ElevatedButton(
+      child: Text("Delete Data collection"),
+      onPressed: _deleteFile,
+    );
+  }
+
+  void _deleteFile() async{
+    final directory = await getApplicationDocumentsDirectory();
+    final userpath = directory.path+"/user.csv";
+    final locationpath = directory.path+"/locations.csv";
+
+    File userfile = File(userpath);
+    File locationfile = File(locationpath);
+
+    print(userfile);
+    if(await userfile.exists()){
+      await userfile.delete();
+      print("user delete done");
+    }
+    if(await locationfile.exists()){
+      await locationfile.delete();
+      print("location delete done");
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -279,7 +314,8 @@ class _MyHomePageState extends State<MyHomePage> {
               status(),
               Divider(),
               dtoWidget(lastLocation),
-              getButton()
+              //getButton(),
+              deleteButton()
             ],
           ),
         ),
@@ -331,7 +367,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Then close the drawer
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Setting(curposition: lastLocation)),
+                  MaterialPageRoute(builder: (context) => Setting(thislocation: thislocation)),
                 );
               },
             ),

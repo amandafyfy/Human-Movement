@@ -4,6 +4,8 @@ import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:convert';
+import './Setting.dart';
+import './main.dart';
 
 class MarkerForm extends StatefulWidget {
 
@@ -70,7 +72,7 @@ class _MarkerFormState extends State<MarkerForm> {
     final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
     print(fields);
 
-    await file.delete();
+    //await file.delete();
   }
 
   @override
@@ -78,6 +80,7 @@ class _MarkerFormState extends State<MarkerForm> {
     LatLng latlang = new LatLng(widget.latlang.latitude.toDouble(), widget.latlang.longitude.toDouble());
     print(latlang.longitude);
     print(latlang.latitude);
+    location thislocation = new location(latlang.longitude, latlang.latitude);
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Marker'),
@@ -160,7 +163,10 @@ class _MarkerFormState extends State<MarkerForm> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _recordvalue(latlang, _locationnameController.text, _Activity1Controller.text, _Activity2Controller.text, _Activity3Controller.text);
-                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Setting(thislocation: thislocation)),
+                        );
                       }
                     },
                     child: const Text('Add Marker'),
