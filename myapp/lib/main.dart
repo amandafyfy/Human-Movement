@@ -299,6 +299,17 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
+              title: const Text('User Info'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserInfo()),
+                );
+              },
+            ),
+            ListTile(
               title: const Text('Setting'),
               onTap: () {
                 // Update the state of the app
