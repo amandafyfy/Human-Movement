@@ -187,8 +187,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _status = LocationStatus.RUNNING;
       }
       lastLocation = dto;
-      print(dto.latitude);
-      print(dto.longitude);
+      //print(dto.latitude);
+      //print(dto.longitude);
       lastTimeLocation = DateTime.now();
       setDatapoint(dto);
     });
@@ -413,6 +413,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   context,
                   MaterialPageRoute(builder: (context) => Dialog()),
                 );
+              },
+            ),
+            ListTile(
+              title: const Text('display file'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                _generateCsvFile();
               },
             ),
           ],

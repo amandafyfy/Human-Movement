@@ -3,6 +3,7 @@ import 'package:carp_background_location/carp_background_location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './MarkerForm.dart';
 import './main.dart';
+import './SettingEdit.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -21,8 +22,7 @@ class _SettingState extends State<Setting> {
   //Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   Set<Marker> markers = new Set();
   int _markerIdCounter = 1;
-
-  final List<List<dynamic>> fields = [];
+  List<List<dynamic>> fields = [];
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -35,16 +35,16 @@ class _SettingState extends State<Setting> {
     print("path:" + path);
 
     final input = new File(path).openRead();
-    final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
-    //print(fields);
+    fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
+    print(fields);
 
     for(int i =2; i<fields.length; i++){
       List<dynamic> element = [];
       element = fields[i];
       if(element.isNotEmpty) {
         print("new line:" + element.toString());
-        print(element[0]);
-        print(element[1]);
+        //print(element[0]);
+        //print(element[1]);
         //LatLng position = new LatLng(element[0], element[1]);
         setState(() {
           markers.add(Marker( //add first marker
@@ -52,9 +52,9 @@ class _SettingState extends State<Setting> {
             position: LatLng(element[1], element[0]), //position of marker
             infoWindow: InfoWindow( //popup info
               title: element[2],
-              snippet: element[3],
+              //snippet: element[3],
             ),
-            icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+            icon: BitmapDescriptor.defaultMarker,
           ));
         });
 
@@ -88,8 +88,7 @@ class _SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.thislocation.latitude);
-    print(widget.thislocation.longitude);
+    List<List<dynamic>> field = fields;
     double lat = widget.thislocation.latitude;
     double long = widget.thislocation.longitude;
     //_readfile();
@@ -107,6 +106,7 @@ class _SettingState extends State<Setting> {
             zoom: 16.0,
           ),
           onMapCreated: _onMapCreated,
+
           compassEnabled: true,
           tiltGesturesEnabled: false,
           onLongPress: (latlang) {
@@ -118,18 +118,41 @@ class _SettingState extends State<Setting> {
           markers:markers.toSet(), //all markers are here
         ),
 
-          floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
-            );
-          },
-            label: Text('Finish setting'),
-            icon: const Icon(Icons.refresh),
-            backgroundColor: Colors.green,
-            ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Stack(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: new FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
+                    );
+                  },
+                  label: Text('Finish setting'),
+                  icon: const Icon(Icons.refresh),
+                  backgroundColor: Colors.green,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: new FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingEdit(field: field)),
+                    );
+                  },
+                  label: Text('Editing'),
+                  foregroundColor: Colors.white,
+                  icon: const Icon(Icons.edit),
+                  backgroundColor: Colors.red,
+                ),
+              ),
+            ],
+        ),
 
       ),
 
