@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';//Import intl in the file this is being done
 import 'package:path_provider/path_provider.dart';
@@ -34,11 +36,14 @@ class _UserInfoState extends State<UserInfo> {
   }
   
   void _generateUserProfile() async{
-    
+    Map<String, dynamic> _userInfo = {'UserName': name, 'GarminId': garminId, 
+    'StravaId': stravaId, 'Gender': gender, 'DoB': dob, 'NumberOfVehicle': numOfvehicle, 'VehicleType': vehicleType};
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
-    File file = File('$path/userProfile.csv');
-    file.writeAsString('Hello Folks');
+    File file = File('$path/userProfile.json');
+    // write user info into a json file
+    file.writeAsString(jsonEncode(_userInfo));
+    
   }
   
   @override
