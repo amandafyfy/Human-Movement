@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';//Import intl in the file this is being done
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 
 class UserInfo extends StatefulWidget {
@@ -43,7 +45,10 @@ class _UserInfoState extends State<UserInfo> {
     File file = File('$path/userProfile.json');
     // write user info into a json file
     file.writeAsString(jsonEncode(_userInfo));
-    
+    // upload file to firebase
+    final destination = 'files/userProfile.json';
+    Reference storageReference = FirebaseStorage.instance.ref().child("$destination");
+    final UploadTask uploadTask = storageReference.putFile(file);
   }
   
   @override
