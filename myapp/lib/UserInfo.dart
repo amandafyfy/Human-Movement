@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';//Import intl in the file this is being done
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+
 
 class UserInfo extends StatefulWidget {
   const UserInfo({Key? key}) : super(key: key);
@@ -11,9 +14,35 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> {
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
+  String? name;
+  String? garminId;
+  String? stravaId;
+  String? gender;
+  String? dob;
+  String? numOfvehicle;
+  String? vehicleType;
+  
+  void _formSubmitted() {
+    // get the current state of the form
+    var _form = _formKey.currentState;
+    if (_form!.validate()) {
+      _form.save();
+    }
+
+  }
+  
+  void _generateUserProfile() async{
+    
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    File file = File('$path/userProfile.csv');
+    file.writeAsString('Hello Folks');
+  }
+  
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -38,6 +67,9 @@ class _UserInfoState extends State<UserInfo> {
                     }
                     return null;
                   },
+                  onSaved: (v) {
+                    name = v;
+                  }
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -49,11 +81,23 @@ class _UserInfoState extends State<UserInfo> {
                     }
                     return null;
                   },
+                  onSaved: (v) {
+                    garminId = v;
+                  }
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
                     hintText: 'Strava Account ID',
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                  onSaved: (v) {
+                    stravaId = v;
+                  }
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -65,6 +109,10 @@ class _UserInfoState extends State<UserInfo> {
                     }
                     return null;
                   },
+                  onSaved: (v){
+                    gender = v;
+                  }
+
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -76,6 +124,9 @@ class _UserInfoState extends State<UserInfo> {
                     }
                     return null;
                   },
+                  onSaved: (v){
+                    dob = v;
+                  }
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -87,6 +138,9 @@ class _UserInfoState extends State<UserInfo> {
                     }
                     return null;
                   },
+                  onSaved: (v){
+                    numOfvehicle = v;
+                  }
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -98,6 +152,9 @@ class _UserInfoState extends State<UserInfo> {
                     }
                     return null;
                   },
+                  onSaved: (v){
+                    vehicleType = v;
+                  }
                 ),
                 
                 Padding(
@@ -106,6 +163,9 @@ class _UserInfoState extends State<UserInfo> {
                     onPressed: () {
                       // Validate will return true if the form is valid, or false if
                       // the form is invalid.
+                      _formSubmitted();
+                      _generateUserProfile();
+
                       if (_formKey.currentState!.validate()) {
                         // Process data.
                       }
