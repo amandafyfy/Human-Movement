@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carp_background_location/carp_background_location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './MarkerForm.dart';
 import './main.dart';
@@ -8,6 +7,9 @@ import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'package:path/path.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key, required this.thislocation}) : super(key: key);
@@ -61,6 +63,18 @@ class _SettingState extends State<Setting> {
         print("finish add markers");
       }
     }
+  }
+
+  void uploadFile() async {
+    final directory =  await getApplicationDocumentsDirectory();
+    final path = directory.path +"/locations.csv";
+
+    File file = File(path);
+    final fileName = basename(file.path);
+    final destination = 'files/$fileName';
+    print(path);
+    Reference storageReference = FirebaseStorage.instance.ref().child("$destination");
+    final UploadTask uploadTask = storageReference.putFile(file);
   }
 
   @override
@@ -125,6 +139,7 @@ class _SettingState extends State<Setting> {
                 child: new FloatingActionButton.extended(
                   heroTag: null,
                   onPressed: () {
+                    uploadFile();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
