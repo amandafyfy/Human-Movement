@@ -180,7 +180,7 @@ class _UserInfoState extends State<UserInfo> {
                         // Process data.
                       }
                     },
-                    child: const Text('Submit'),
+                    child: const Text('Saved'),
                   ),
                 ),
               ],
