@@ -6,3 +6,4 @@ else
 fi
 
 brew install sqlite
+

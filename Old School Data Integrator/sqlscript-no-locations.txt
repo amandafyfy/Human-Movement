@@ -2,17 +2,11 @@
 .headers on
 .import output/all_records_final.csv records
 .import data/visited_places.csv visitedPlaces
-.import data/locations.csv locations
 
 .output output/finalData.csv
 
-SELECT * FROM
-(
 SELECT * FROM (SELECT ROUND(latitude,4) AS lat4 , ROUND(longitude,4) AS long4, * FROM records)
 LEFT JOIN (SELECT ROUND(latitude,4) AS lat4 , ROUND(longitude,4) AS long4, * FROM visitedPlaces)
-USING (id, lat4, long4)
-)
-LEFT JOIN (SELECT ROUND(latitude,4) AS lat4 , ROUND(longitude,4) AS long4, * FROM locations)
-USING (lat4, long4);
+USING (id, lat4, long4);
 
 .output stdout
