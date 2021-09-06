@@ -7,3 +7,5 @@ fi
 
 brew install sqlite
 
+chmod u+x dataIntegrator.command
+
