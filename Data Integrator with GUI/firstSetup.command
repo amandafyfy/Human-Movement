@@ -6,6 +6,8 @@ else
 fi
 
 brew install sqlite
+brew install python3
 
-chmod u+x dataIntegrator.command
+chmod u+x integrateData.command
+chmod u+x runGUI.command
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""This module provides the RP Renamer application."""
+"""This module provides the Integrator application."""
 
 import sys
 

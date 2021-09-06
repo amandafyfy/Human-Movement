@@ -3,6 +3,7 @@
 """This module provides the Integrator class to merge multiple files."""
 
 import time
+import subprocess
 from pathlib import Path
 
 from PyQt5.QtCore import QObject, pyqtSignal
@@ -19,6 +20,9 @@ class Integrator(QObject):
         self._files = files
         self._prefix = prefix
 
+    def runShellScript():
+        subprocess.call('./integrate.sh', shell=True)
+
     def renameFiles(self):
         for fileNumber, file in enumerate(self._files, 1):
             newFile = file.parent.joinpath(
@@ -30,3 +34,4 @@ class Integrator(QObject):
             self.renamedFile.emit(newFile)
         self.progressed.emit(0)  # Reset the progress
         self.finished.emit()
+        self.runShellScript()

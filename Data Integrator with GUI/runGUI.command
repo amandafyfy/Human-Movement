@@ -3,5 +3,5 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 source integrator/venv/bin/activate
 
-python3 merge.py
+python3 integrate.py
 

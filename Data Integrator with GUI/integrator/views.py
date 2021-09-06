@@ -13,12 +13,8 @@ from .ui.window import Ui_Window
 
 FILTERS = ";;".join(
     (
-        "PNG Files (*.png)",
-        "JPEG Files (*.jpeg)",
-        "JPG Files (*.jpg)",
-        "GIF Files (*.gif)",
-        "Text Files (*.txt)",
-        "Python Files (*.py)",
+        "CSV Files (*.csv)",
+        "JSON Files (*.txt)",
     )
 )
 
