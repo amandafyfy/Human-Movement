@@ -35,21 +35,11 @@ class Window(QWidget, Ui_Window):
         self._filesCount = len(self._files)
         self.loadFilesButton.setEnabled(True)
         self.loadFilesButton.setFocus(True)
-        self.loadFilesButton_2.setEnabled(True)
-        self.renameFilesButton.setEnabled(False)
-        self.prefixEdit.clear()
-        self.prefixEdit.setEnabled(False)
+        self.integrateButton.setEnabled(False)
 
     def _connectSignalsSlots(self):
         self.loadFilesButton.clicked.connect(self.loadFiles)
-        self.renameFilesButton.clicked.connect(self.renameFiles)
-        self.prefixEdit.textChanged.connect(self._updateStateWhenReady)
-
-    def _updateStateWhenReady(self):
-        if self.prefixEdit.text():
-            self.renameFilesButton.setEnabled(True)
-        else:
-            self.renameFilesButton.setEnabled(False)
+        self.integrateButton.clicked.connect(self.integrateFiles)
 
     def loadFiles(self):
         self.dstFileList.clear()
@@ -60,52 +50,44 @@ class Window(QWidget, Ui_Window):
         files, filter = QFileDialog.getOpenFileNames(
             self, "Choose Files to Integrate", initDir, filter=FILTERS
         )
-        if len(files) > 0:
-            fileExtension = filter[filter.index("*"): -1]
-            self.extensionLabel.setText(fileExtension)
+        if len(files) > 1:
             srcDirName = str(Path(files[0]).parent)
             self.dirEdit.setText(srcDirName)
             for file in files:
                 self._files.append(Path(file))
                 self.srcFileList.addItem(file)
             self._filesCount = len(self._files)
-            self._updateStateWhenFilesLoaded()
+            self.integrateButton.setEnabled(True)
 
-    def _updateStateWhenFilesLoaded(self):
-        self.prefixEdit.setEnabled(True)
-        self.prefixEdit.setFocus(True)
+    def integrateFiles(self):
+        self._runIntegratorThread()
+        self._updateStateWhileIntegrating()
 
-    def renameFiles(self):
-        self._runRenamerThread()
-        self._updateStateWhileRenaming()
-
-    def _updateStateWhileRenaming(self):
+    def _updateStateWhileIntegrating(self):
         self.loadFilesButton.setEnabled(False)
-        self.loadFilesButton_2.setEnabled(False)
-        self.renameFilesButton.setEnabled(False)
+        self.integrateButton.setEnabled(False)
 
-    def _runRenamerThread(self):
-        prefix = self.prefixEdit.text()
+    def _runIntegratorThread(self):
         self._thread = QThread()
-        self._renamer = Integrator(
-            files=tuple(self._files),
-            prefix=prefix,
+        self._integrator = Integrator(
+            files=tuple(self._files)
         )
-        self._renamer.moveToThread(self._thread)
-        # Rename
-        self._thread.started.connect(self._renamer.integrateFiles)
+        self._integrator.moveToThread(self._thread)
+        # Integrate
+        self._thread.started.connect(self._integrator.integrateFiles)
         # Update state
-        self._renamer.integratedFile.connect(self._updateStateWhenFileRenamed)
-        self._renamer.progressed.connect(self._updateProgressBar)
-        self._renamer.finished.connect(self._updateStateWhenNoFiles)
+        self._integrator.integratedFile.connect(
+            self._updateStateWhenFileIntegrated)
+        self._integrator.progressed.connect(self._updateProgressBar)
+        self._integrator.finished.connect(self._updateStateWhenNoFiles)
         # Clean up
-        self._renamer.finished.connect(self._thread.quit)
-        self._renamer.finished.connect(self._renamer.deleteLater)
+        self._integrator.finished.connect(self._thread.quit)
+        self._integrator.finished.connect(self._integrator.deleteLater)
         self._thread.finished.connect(self._thread.deleteLater)
         # Run the thread
         self._thread.start()
 
-    def _updateStateWhenFileRenamed(self, newFile):
+    def _updateStateWhenFileIntegrated(self, newFile):
         self._files.popleft()
         self.srcFileList.takeItem(0)
         self.dstFileList.addItem(str(newFile))

@@ -3,7 +3,6 @@
 """This module provides the Integrator class to merge multiple files."""
 
 import time
-import subprocess
 import os
 from pathlib import Path
 
@@ -16,10 +15,9 @@ class Integrator(QObject):
     integratedFile = pyqtSignal(Path)
     finished = pyqtSignal()
 
-    def __init__(self, files, prefix):
+    def __init__(self, files):
         super().__init__()
         self._files = files
-        self._prefix = prefix
 
     def integrateFiles(self):
         cwd = os.getcwd()
@@ -29,12 +27,11 @@ class Integrator(QObject):
                 f"{cwd}/data/{str(oldName)}"
             )
             file.rename(newPath)
-            time.sleep(0.1)  # Comment this line to rename files faster.
+            time.sleep(0.1)  # Comment this line to integrate move faster.
             self.progressed.emit(fileNumber)
             self.integratedFile.emit(newPath)
         self.progressed.emit(0)  # Reset the progress
         self.finished.emit()
-        time.sleep(0.5)
         cmd = '''
         mkdir output
 
@@ -48,9 +45,9 @@ class Integrator(QObject):
             sqlite3 < sqlscript.txt
         fi
 
-        mkdir data/integrated
+        mkdir data/Integrated\ Data
 
-        mv data/*.csv data/integrated/
+        mv data/*.csv data/Integrated\ Data/
 
         '''
         os.system(cmd)
