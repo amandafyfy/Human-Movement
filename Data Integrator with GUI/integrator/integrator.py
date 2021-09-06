@@ -25,20 +25,17 @@ class Integrator(QObject):
         cwd = os.getcwd()
         for fileNumber, file in enumerate(self._files, 1):
             oldName = file.name
-            newFile = file.parent.joinpath(
-                f"{cwd}/data/{self._prefix}{str(fileNumber)}{file.suffix}"
+            newPath = file.parent.joinpath(
+                f"{cwd}/data/{str(oldName)}"
             )
-            file.rename(newFile)
+            file.rename(newPath)
             time.sleep(0.1)  # Comment this line to rename files faster.
             self.progressed.emit(fileNumber)
-            self.integratedFile.emit(newFile)
+            self.integratedFile.emit(newPath)
         self.progressed.emit(0)  # Reset the progress
         self.finished.emit()
+        time.sleep(0.5)
         cmd = '''
-        touch file1.txt
-        touch file2.txt
-        '''
-        cmd2 = '''
         mkdir output
 
         head -1 data/records1.csv > output/all_records_final.csv
@@ -50,6 +47,10 @@ class Integrator(QObject):
         else
             sqlite3 < sqlscript.txt
         fi
+
+        mkdir data/integrated
+
+        mv data/*.csv data/integrated/
 
         '''
         os.system(cmd)
