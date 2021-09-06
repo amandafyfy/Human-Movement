@@ -35,6 +35,7 @@ class Window(QWidget, Ui_Window):
         self._filesCount = len(self._files)
         self.loadFilesButton.setEnabled(True)
         self.loadFilesButton.setFocus(True)
+        self.loadFilesButton_2.setEnabled(True)
         self.renameFilesButton.setEnabled(False)
         self.prefixEdit.clear()
         self.prefixEdit.setEnabled(False)
@@ -57,7 +58,7 @@ class Window(QWidget, Ui_Window):
         else:
             initDir = str(Path.home())
         files, filter = QFileDialog.getOpenFileNames(
-            self, "Choose Files to Rename", initDir, filter=FILTERS
+            self, "Choose Files to Integrate", initDir, filter=FILTERS
         )
         if len(files) > 0:
             fileExtension = filter[filter.index("*"): -1]
@@ -80,6 +81,7 @@ class Window(QWidget, Ui_Window):
 
     def _updateStateWhileRenaming(self):
         self.loadFilesButton.setEnabled(False)
+        self.loadFilesButton_2.setEnabled(False)
         self.renameFilesButton.setEnabled(False)
 
     def _runRenamerThread(self):
@@ -91,9 +93,9 @@ class Window(QWidget, Ui_Window):
         )
         self._renamer.moveToThread(self._thread)
         # Rename
-        self._thread.started.connect(self._renamer.renameFiles)
+        self._thread.started.connect(self._renamer.integrateFiles)
         # Update state
-        self._renamer.renamedFile.connect(self._updateStateWhenFileRenamed)
+        self._renamer.integratedFile.connect(self._updateStateWhenFileRenamed)
         self._renamer.progressed.connect(self._updateProgressBar)
         self._renamer.finished.connect(self._updateStateWhenNoFiles)
         # Clean up

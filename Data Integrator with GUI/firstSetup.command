@@ -8,6 +8,6 @@ fi
 brew install sqlite
 brew install python3
 
-chmod u+x integrateData.command
+chmod u+x CLI/runCLI.command
 chmod u+x runGUI.command
 

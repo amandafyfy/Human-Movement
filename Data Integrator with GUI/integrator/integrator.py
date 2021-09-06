@@ -4,6 +4,7 @@
 
 import time
 import subprocess
+import os
 from pathlib import Path
 
 from PyQt5.QtCore import QObject, pyqtSignal
@@ -12,7 +13,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 class Integrator(QObject):
     # Define custom signals
     progressed = pyqtSignal(int)
-    renamedFile = pyqtSignal(Path)
+    integratedFile = pyqtSignal(Path)
     finished = pyqtSignal()
 
     def __init__(self, files, prefix):
@@ -20,18 +21,35 @@ class Integrator(QObject):
         self._files = files
         self._prefix = prefix
 
-    def runShellScript():
-        subprocess.call('./integrate.sh', shell=True)
-
-    def renameFiles(self):
+    def integrateFiles(self):
+        cwd = os.getcwd()
         for fileNumber, file in enumerate(self._files, 1):
+            oldName = file.name
             newFile = file.parent.joinpath(
-                f"{self._prefix}{str(fileNumber)}{file.suffix}"
+                f"{cwd}/data/{self._prefix}{str(fileNumber)}{file.suffix}"
             )
             file.rename(newFile)
             time.sleep(0.1)  # Comment this line to rename files faster.
             self.progressed.emit(fileNumber)
-            self.renamedFile.emit(newFile)
+            self.integratedFile.emit(newFile)
         self.progressed.emit(0)  # Reset the progress
         self.finished.emit()
-        self.runShellScript()
+        cmd = '''
+        touch file1.txt
+        touch file2.txt
+        '''
+        cmd2 = '''
+        mkdir output
+
+        head -1 data/records1.csv > output/all_records_final.csv
+        tail -n +2 -q data/records*.csv >> output/all_records_final.csv
+
+        grep -q "" data/locations.csv
+        if [[ $? != 0 ]] ; then
+            sqlite3 < sqlscript-no-locations.txt
+        else
+            sqlite3 < sqlscript.txt
+        fi
+
+        '''
+        os.system(cmd)
