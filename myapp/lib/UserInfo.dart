@@ -124,6 +124,7 @@ class _UserInfoState extends State<UserInfo> {
                   }
 
                 ),
+                /*
                 TextFormField(
                   decoration: const InputDecoration(
                     hintText: 'Date of Birth',
@@ -137,7 +138,7 @@ class _UserInfoState extends State<UserInfo> {
                   onSaved: (v){
                     dob = v;
                   }
-                ),
+                ), */
                 TextFormField(
                   decoration: const InputDecoration(
                     hintText: 'Number of Vehicle Owned',
