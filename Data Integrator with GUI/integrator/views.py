@@ -50,7 +50,7 @@ class Window(QWidget, Ui_Window):
         files, filter = QFileDialog.getOpenFileNames(
             self, "Choose Files to Integrate", initDir, filter=FILTERS
         )
-        if len(files) > 1:
+        if len(files) > 0:
             srcDirName = str(Path(files[0]).parent)
             self.dirEdit.setText(srcDirName)
             for file in files:
