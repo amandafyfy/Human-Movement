@@ -14,8 +14,11 @@ import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cron/cron.dart';
+
 
 const fetchBackground = "fetchBackground";
+int num = 0;
 class location {
   double longitude;
   double latitude;
@@ -24,7 +27,7 @@ class location {
 }
 
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
   
@@ -141,11 +144,16 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
   void _generateCsvFile() async{
+    // file ID
+    num +=1;
+    String count = num.toString();
+    // generate file name
+    String file_name = "${default_info.userName}${num}.csv";
     List<List<dynamic>> rows = [];
 
     String csv = "";
     final directory = await getApplicationDocumentsDirectory();
-    final path = directory.path+"/user.csv";
+    final path = directory.path+ file_name;
     print("path:" + path);
 
     File file = File(path);
@@ -220,7 +228,8 @@ class _MyHomePageState extends State<MyHomePage> {
   // user upload the csv file
   void uploadFile() async {
     final directory =  await getApplicationDocumentsDirectory();
-    final path = directory.path +"/user.csv";
+    String file_name = "${default_info.userName}${num}.csv";
+    final path = directory.path + file_name;
 
     File file = File(path);
     final fileName = basename(file.path);
@@ -230,6 +239,15 @@ class _MyHomePageState extends State<MyHomePage> {
     final UploadTask uploadTask = storageReference.putFile(file);
   }
 
+  // @Cathyling 
+  // send file to fire base every midnight
+  void sendFile() {
+    final cron = new Cron();
+    cron.schedule(new Schedule.parse('*/2 * * * *'), () async {
+      _generateCsvFile();
+      uploadFile();
+    });
+  }
   Widget stopButton() {
     String msg = 'STOP';
 
@@ -421,6 +439,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Update the state of the app
                 // Then close the drawer
                 _generateCsvFile();
+              },
+            ),
+            ListTile(
+              title: const Text('share data'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                sendFile();
               },
             ),
           ],
