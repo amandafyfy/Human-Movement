@@ -39,6 +39,7 @@ dependencies:
   # Upload file to firebase
   firebase_core: ^1.0.3
   firebase_storage: ^8.0.3
+  cron: ^0.3.2
 
 dev_dependencies:
   flutter_test:
