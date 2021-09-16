@@ -11,3 +11,6 @@
 
 If your "Data Integrator with GUI" folder is in Desktop, series of commands in Terminal would like like this:
 
+![image](https://user-images.githubusercontent.com/56809330/133559238-6c7df3b5-892d-403f-8adf-d90c2b58d3e1.png)
+
+
