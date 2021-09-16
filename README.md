@@ -7,3 +7,8 @@
 5) Make firstSetup.command executable ( mkdir u+x firstSetup.command )
 6) run "firstSetup.command" (./firstSetup.command)
 7) Open the application. (Double click runGUI.command)
+
+If your "Data Integrator with GUI" folder is in Desktop, series of commands in Terminal would like like this:
+
+![image](https://user-images.githubusercontent.com/56809330/133558451-6dd328b3-b91f-45e5-a9d8-e50e75c1b447.png)
+
