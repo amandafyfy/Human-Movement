@@ -113,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
   LocationStatus _status = LocationStatus.UNKNOWN;
   List<DataPoint> UserData = [];
   String _garminId = "";
+  int _num = 0;
 
   @override
   void initState() {
@@ -125,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
     locationStream = LocationManager().locationStream;
     locationSubscription = locationStream?.listen(onData);
     _getGarminId();
+    _getFileNum();
     
   }
 // @Cathyling
@@ -134,6 +136,20 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _garminId = (prefs.getString('GarminId') ?? "");
       });
+  }
+
+// get file number from shared_preference
+  void _getFileNum() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _num = (prefs.getInt('file number') ?? 0);
+    });
+  }
+
+// incrementing file number and saved in shared_preference
+  void _setFilenum(int n) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('file number', n+1);
   }
 
   
@@ -159,11 +175,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
   void _generateCsvFile() async{
-    // file ID
-    num +=1;
-    String count = num.toString();
     // generate file name
-    String file_name = "${_garminId}${num}.csv";
+    String file_name = "${_garminId}${_num}.csv";
     List<List<dynamic>> rows = [];
 
     String csv = "";
