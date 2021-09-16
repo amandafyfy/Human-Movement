@@ -15,6 +15,8 @@ import 'package:path/path.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cron/cron.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 const fetchBackground = "fetchBackground";
@@ -110,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
   StreamSubscription<LocationDto>? locationSubscription;
   LocationStatus _status = LocationStatus.UNKNOWN;
   List<DataPoint> UserData = [];
+  String _garminId = "";
 
   @override
   void initState() {
@@ -121,7 +124,19 @@ class _MyHomePageState extends State<MyHomePage> {
     LocationManager().notificationMsg = 'CARP is tracking your location';
     locationStream = LocationManager().locationStream;
     locationSubscription = locationStream?.listen(onData);
+    _getGarminId();
+    
   }
+// @Cathyling
+// get GarminId from shared_preference
+  void _getGarminId() async {
+      final prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _garminId = (prefs.getString('GarminId') ?? "");
+      });
+  }
+
+  
   void add_head(List<List<dynamic>> rows){
     List<dynamic> row = [];
     row.add("date");
@@ -148,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
     num +=1;
     String count = num.toString();
     // generate file name
-    String file_name = "${default_info.userName}${num}.csv";
+    String file_name = "${_garminId}${num}.csv";
     List<List<dynamic>> rows = [];
 
     String csv = "";
