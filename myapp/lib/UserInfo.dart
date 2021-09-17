@@ -43,19 +43,22 @@ class _UserInfoState extends State<UserInfo> {
     'StravaId': stravaId, 'Gender': gender,  'NumberOfVehicle': numOfvehicle, 'VehicleType': vehicleType};
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
-    File file = File('$path/$garminId.json');
+    File file = File('$path/${garminId}userProfile.json');
     // write user info into a json file
     file.writeAsString(jsonEncode(_userInfo));
     // set file path on firebase storage
-    final destination = '$garminId/$garminId.json';
+    final destination = '$garminId/${garminId}userProfile.json';
     Reference storageReference = FirebaseStorage.instance.ref().child("$destination");
     // upload file to firebase
     final UploadTask uploadTask = storageReference.putFile(file);
   }
-// store GarminId to shared_preference
+  // store GarminId to shared_preference
   void _setGarminId(String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("GarminId", value);
+    prefs.setString("GarminId", value);    
+    // String gId = (prefs.getString('GarminId') ?? "");
+    // print("get ${gId}");
+
   }
   
   @override
@@ -185,11 +188,9 @@ class _UserInfoState extends State<UserInfo> {
                       _setGarminId(garminId!);
                       _generateUserProfile();
 
-                      if (_formKey.currentState!.validate()) {
-                        // Process data.
-                      }
+                      Navigator.pop(context);
                     },
-                    child: const Text('Saved'),
+                    child: const Text('Save'),
                   ),
                 ),
               ],
