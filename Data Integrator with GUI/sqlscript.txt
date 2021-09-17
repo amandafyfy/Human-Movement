@@ -3,6 +3,7 @@
 .import output/all_records_final.csv records
 .import data/visited_places.csv visitedPlaces
 .import data/locations.csv locations
+.import data/garmin.csv garmin
 
 .output output/finalData.csv
 
@@ -13,6 +14,8 @@ LEFT JOIN (SELECT ROUND(latitude,4) AS lat4 , ROUND(longitude,4) AS long4, * FRO
 USING (id, lat4, long4)
 )
 LEFT JOIN (SELECT ROUND(latitude,4) AS lat4 , ROUND(longitude,4) AS long4, * FROM locations)
-USING (lat4, long4);
+USING (lat4, long4)
+LEFT JOIN (* FROM garmin)
+ON garmin.Date = records.date;
 
 .output stdout
