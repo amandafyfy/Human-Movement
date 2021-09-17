@@ -15,7 +15,6 @@ FILTERS = ";;".join(
     (
         "CSV Files (*.csv)",
         "JSON Files (*.txt)",
-        "GPX Files (*.gpx)"
     )
 )
 
