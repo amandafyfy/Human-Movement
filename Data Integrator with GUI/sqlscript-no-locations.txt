@@ -1,6 +1,6 @@
 .mode csv
 .headers on
-.import output/all_records_final.csv records
+.import output/finalData.csv records
 .import data/visited_places.csv visitedPlaces
 
 .output output/finalData.csv
