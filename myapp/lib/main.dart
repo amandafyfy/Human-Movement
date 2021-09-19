@@ -116,6 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String _garminId = "";
   int _num = 0;
   bool flag = false;
+  bool firstState = false;
+  bool secondState = false;
 
   @override
   void initState() {
@@ -130,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _getGarminId();
     _getFileNum();
     userGuide();
+
   }
 // @Cathyling
 // get GarminId from shared_preference
@@ -158,16 +161,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<bool> setUserState () async{
-    String userProfile = "${_garminId}userProfile.json";
 
+    //String userProfile = "${_garminId}userProfile.json";
     final directory = await getApplicationDocumentsDirectory();
-    final userInfoPath = "${directory.path}/${userProfile}";
+    final userInfoPath = "${directory.path}/${_garminId}userProfile.json";
     File userfile = File(userInfoPath);
     if(await userfile.exists()){
-      return true;
+      setState ((){
+        firstState = true;
+
+        print("first" + firstState.toString());
+      });
     }else{
-      return false;
+      setState ((){
+        firstState = false;
+        print("first" + firstState.toString());
+      });
     }
+    return firstState;
   }
 
 
@@ -178,14 +189,23 @@ class _MyHomePageState extends State<MyHomePage> {
     final locationPath = "${directory.path}/${location}";
     File locations = File(locationPath);
     if(await locations.exists()){
-      return true;
+      setState ((){
+        secondState = true;
+        print("second" + secondState.toString());
+      });
     }else{
-      return false;
+      setState ((){
+        secondState = false;
+        print("second" + secondState.toString());
+      });
     }
+    return secondState;
   }
 
   Future<bool> userGuide () async{
-    if(await setLocationState() && await setUserState()){
+    await setUserState();
+    await setLocationState();
+    if(firstState && secondState){
       setState ((){
         flag = true;
         print(flag.toString());
@@ -532,11 +552,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 deleteButton()
               ],
               if(flag == false)...[
-                firstStep(),
-                firstLink(),
-                SizedBox(height: 30.0),
-                secondStep(),
-                secondLink(),
+                if(!firstState)...[
+                  SizedBox(height: 30.0),
+                  firstStep(),
+                  firstLink(),
+                ],
+                if(!secondState)...[
+                  SizedBox(height: 30.0),
+                  secondStep(),
+                  secondLink(),
+                ],
               ],
             ],
           ),
