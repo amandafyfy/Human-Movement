@@ -14,7 +14,8 @@ from .ui.window import Ui_Window
 FILTERS = ";;".join(
     (
         "CSV Files (*.csv)",
-        "JSON Files (*.txt)",
+        "JSON Files (*.jsn)",
+        "GPX Files (*.gpx)",
     )
 )
 

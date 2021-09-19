@@ -14,6 +14,10 @@ import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cron/cron.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 const fetchBackground = "fetchBackground";
 class location {
@@ -24,7 +28,7 @@ class location {
 }
 
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
   
@@ -108,6 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
   StreamSubscription<LocationDto>? locationSubscription;
   LocationStatus _status = LocationStatus.UNKNOWN;
   List<DataPoint> UserData = [];
+  String _garminId = "";
+  int _num = 0;
 
   @override
   void initState() {
@@ -119,7 +125,37 @@ class _MyHomePageState extends State<MyHomePage> {
     LocationManager().notificationMsg = 'CARP is tracking your location';
     locationStream = LocationManager().locationStream;
     locationSubscription = locationStream?.listen(onData);
+    _getGarminId();
+    _getFileNum();
+    
   }
+// @Cathyling
+// get GarminId from shared_preference
+  void _getGarminId() async {
+      final prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _garminId = (prefs.getString('GarminId')?? "");
+      });
+  }
+
+// get file number from shared_preference
+  void _getFileNum() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _num = (prefs.getInt('file number') ?? 0);
+    });
+  }
+
+// incrementing file number and save it in shared_preference
+  void _setFileNum(int n) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('file number', n+1);
+    setState(() {
+      _num = n + 1;
+    });
+  }
+
+  
   void add_head(List<List<dynamic>> rows){
     List<dynamic> row = [];
     row.add("date");
@@ -144,11 +180,13 @@ class _MyHomePageState extends State<MyHomePage> {
     UserData = [];
   }
   void _generateCsvFile() async{
+    // generate file name
+    String file_name = "${_garminId}${_num}.csv";
     List<List<dynamic>> rows = [];
 
     String csv = "";
     final directory = await getApplicationDocumentsDirectory();
-    final path = directory.path+"/user.csv";
+    final path = "${directory.path}/${file_name}";
     print("path:" + path);
 
     File file = File(path);
@@ -158,17 +196,19 @@ class _MyHomePageState extends State<MyHomePage> {
       await file.writeAsString(csv, mode: FileMode.append);
       UserData.clear();
     }else{
+      // create csv file
+      await file.create();
       add_head(rows);
       add_context(rows);
       csv = const ListToCsvConverter().convert(rows);
       await file.writeAsString(csv);
+      UserData.clear();
     }
 
     final input = new File(path).openRead();
     final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
     print(fields);
     //await file.delete();
-
   }
 
   void setDatapoint(LocationDto dto){
@@ -224,16 +264,38 @@ class _MyHomePageState extends State<MyHomePage> {
   // user upload the csv file
   void uploadFile() async {
     final directory =  await getApplicationDocumentsDirectory();
-    final path = directory.path +"/user.csv";
-
+    String file_name = "${_garminId}${_num}.csv";
+    final path = "${directory.path}/${file_name}";
     File file = File(path);
-    final fileName = basename(file.path);
-    final destination = 'files/$fileName';
+    // file path on firebase storage
+    final destination = '${_garminId}/$file_name';
     print(path);
+    print(destination);
     Reference storageReference = FirebaseStorage.instance.ref().child("$destination");
-    final UploadTask uploadTask = storageReference.putFile(file);
+    //final UploadTask uploadTask = storageReference.putFile(file);
+    // upload file to firebase storage 
+    storageReference.putFile(file);
+    // incrementing file number
+    _setFileNum(_num);
   }
 
+  // @Cathyling 
+  // send file to fire base every 4 minutes
+  void sendFile() {
+    final cron = new Cron();
+    cron.schedule(new Schedule.parse('*/4 * * * *'), () async {
+      _generateCsvFile();
+      uploadFile();
+    });
+  }
+  // write UserData into csv every 2 minutes
+  void writeCSV() {
+    final cron = new Cron();
+    cron.schedule(new Schedule.parse('*/2 * * * *'), () async {
+      _generateCsvFile();
+    });
+  }
+  
   Widget stopButton() {
     String msg = 'STOP';
 
@@ -380,7 +442,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserInfo()),
-                );
+                ).then((value){
+                  _getGarminId();
+                });
               },
             ),
             ListTile(
@@ -402,8 +466,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
-                _generateCsvFile();
+                
+                //_generateCsvFile();
                 uploadFile();
+               
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               },
             ),
@@ -425,6 +491,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Update the state of the app
                 // Then close the drawer
                 _generateCsvFile();
+              },
+            ),
+            ListTile(
+              title: const Text('share data'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                sendFile();
+                writeCSV();
               },
             ),
           ],
