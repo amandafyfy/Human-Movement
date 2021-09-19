@@ -17,13 +17,18 @@ class editLocation extends StatefulWidget {
 
 class _editLocationState extends State<editLocation> {
   TextEditingController _locationnameController = new TextEditingController();
+  TextEditingController _transmodeController = new TextEditingController();
   TextEditingController _Activity1Controller = new TextEditingController();
   TextEditingController _Activity2Controller = new TextEditingController();
   TextEditingController _Activity3Controller = new TextEditingController();
+  TextEditingController _enjoy1Controller = new TextEditingController();
+  TextEditingController _enjoy2Controller = new TextEditingController();
+  TextEditingController _enjoy3Controller = new TextEditingController();
+  TextEditingController _CommentController = new TextEditingController();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
 
-  void editvalue(String key, double long, double lat, String locationName, String Activ1, String Activ2, String Activ3) async{
+  void editvalue(String key, double long, double lat, String locationName, String trans_mode, String Activ1, String enjoy1, String Activ2, String enjoy2, String Activ3, String enjoy3, String comment) async{
 
     String csv = "";
     final directory = await getApplicationDocumentsDirectory();
@@ -42,9 +47,14 @@ class _editLocationState extends State<editLocation> {
         element[0]=long;
         element[1]=lat;
         element[2]=locationName;
-        element[3]=Activ1;
-        element[4]=Activ2;
-        element[5]=Activ3;
+        element[3]=trans_mode;
+        element[4]=Activ1;
+        element[5]=enjoy1;
+        element[6]=Activ2;
+        element[7]=enjoy2;
+        element[8]=Activ3;
+        element[9]=enjoy3;
+        element[10]=comment;
       }
     }
 
@@ -61,10 +71,14 @@ class _editLocationState extends State<editLocation> {
     thislocation.longitude = widget.item[0];
     thislocation.latitude = widget.item[1];
     _locationnameController = TextEditingController(text: widget.item[2]);
-    _Activity1Controller = TextEditingController(text: widget.item[3]);
-    _Activity2Controller = TextEditingController(text: widget.item[4]);
-    _Activity3Controller = TextEditingController(text: widget.item[5]);
-
+    _transmodeController = TextEditingController(text: widget.item[3]);
+    _Activity1Controller = TextEditingController(text: widget.item[4]);
+    _enjoy1Controller = TextEditingController(text: widget.item[5].toString());
+    _Activity2Controller = TextEditingController(text: widget.item[6]);
+    _enjoy2Controller = TextEditingController(text: widget.item[7].toString());
+    _Activity3Controller = TextEditingController(text: widget.item[8]);
+    _enjoy3Controller = TextEditingController(text: widget.item[9].toString());
+    _CommentController = TextEditingController(text: widget.item[10]);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Marker'),
@@ -84,7 +98,7 @@ class _editLocationState extends State<editLocation> {
                 autocorrect: true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
+                  border: OutlineInputBorder(),
                   labelText: 'Name this location',
                   prefixIcon: Icon(Icons.person),
                 ),
@@ -95,6 +109,27 @@ class _editLocationState extends State<editLocation> {
                   return null;
                 },
               ),
+              SizedBox(height: 18.0),
+
+              TextFormField(
+                controller: _transmodeController,
+                autofocus: true,
+                autocorrect: true,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Usual Mode of Transport',
+                  prefixIcon: Icon(Icons.emoji_transportation),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter location name';
+                  }
+                  return null;
+                },
+              ),
+
+              SizedBox(height: 18.0),
 
               TextFormField(
                 controller: _Activity1Controller,
@@ -102,9 +137,9 @@ class _editLocationState extends State<editLocation> {
                 autocorrect: true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter activity you perform in this place',
-                  prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(),
+                    labelText: 'Activity Name 1 (1=Most usual)',
+                    prefixIcon: Icon(Icons.local_activity_outlined)
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -115,16 +150,56 @@ class _editLocationState extends State<editLocation> {
               ),
 
               TextFormField(
+                controller: _enjoy1Controller,
+                autofocus: true,
+                autocorrect: true,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enjoyment Rating',
+                    prefixIcon: Icon(Icons.mood)
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty || int.parse(value)>10) {
+                    return 'Max rate is 10';
+                  }
+                  return null;
+                },
+              ),
+
+              SizedBox(height: 20.0),
+
+              TextFormField(
                 controller: _Activity2Controller,
                 autofocus: true,
                 autocorrect: true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter activity you perform in this place',
-                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(),
+                  labelText: 'Activity Name 2 (2=usual)',
+                  prefixIcon: Icon(Icons.local_activity_outlined),
                 ),
               ),
+
+              TextFormField(
+                controller: _enjoy2Controller,
+                autofocus: true,
+                autocorrect: true,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enjoyment Rating',
+                    prefixIcon: Icon(Icons.mood)
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty || int.parse(value)>10) {
+                    return 'Max rate is 10';
+                  }
+                  return null;
+                },
+              ),
+
+              SizedBox(height: 20.0),
 
               TextFormField(
                 controller: _Activity3Controller,
@@ -132,9 +207,41 @@ class _editLocationState extends State<editLocation> {
                 autocorrect: true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter activity you perform in this place?',
-                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(),
+                  labelText: 'Activity Name 3 (3=Least usual)',
+                  prefixIcon: Icon(Icons.local_activity_outlined),
+                ),
+              ),
+
+              TextFormField(
+                controller: _enjoy3Controller,
+                autofocus: true,
+                autocorrect: true,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enjoyment Rating',
+                    prefixIcon: Icon(Icons.mood)
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty || int.parse(value)>10) {
+                    return 'Max rate is 10';
+                  }
+                  return null;
+                },
+              ),
+
+              SizedBox(height: 20.0),
+
+              TextFormField(
+                controller: _CommentController,
+                autofocus: true,
+                autocorrect: true,
+                keyboardType: TextInputType.text,
+                maxLines: 8,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter your comment',
                 ),
               ),
 
@@ -146,7 +253,7 @@ class _editLocationState extends State<editLocation> {
                     //style: style,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        editvalue(widget.item[2], widget.item[0], widget.item[1], _locationnameController.text, _Activity1Controller.text, _Activity2Controller.text, _Activity3Controller.text);
+                        editvalue(widget.item[2], widget.item[0], widget.item[1], _locationnameController.text, _transmodeController.text, _Activity1Controller.text, _enjoy1Controller.text, _Activity2Controller.text, _enjoy2Controller.text, _Activity3Controller.text, _enjoy3Controller.text, _CommentController.text);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Setting(thislocation: thislocation)),

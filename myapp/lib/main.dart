@@ -75,7 +75,8 @@ class MyHomePage extends StatefulWidget {
 enum LocationStatus { UNKNOWN, RUNNING, STOPPED }
 
 String dtoToString(LocationDto dto) =>
-    'Location ${dto.latitude}, ${dto.longitude} at ${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}';
+    //'Location ${dto.latitude}, ${dto.longitude} at ${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}';
+    'Location ${dto.latitude}, ${dto.longitude} at ${dto.time}';
 
 Widget dtoWidget(LocationDto? dto) {
 
@@ -139,6 +140,8 @@ class _MyHomePageState extends State<MyHomePage> {
       row.add(UserData[i].speed);
       rows.add(row);
     }
+
+    UserData = [];
   }
   void _generateCsvFile() async{
     List<List<dynamic>> rows = [];
@@ -169,7 +172,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void setDatapoint(LocationDto dto){
-    String time = DateTime.fromMillisecondsSinceEpoch(dto.time.toInt()).toString();
+    //String time = DateTime.fromMillisecondsSinceEpoch(dto.time.toInt()).toString();
+    double time = dto.time;
     DataPoint segment = new DataPoint(time, dto.longitude, dto.latitude, dto.speed);
     UserData.add(segment);
   }
