@@ -40,7 +40,7 @@ class _MarkerFormState extends State<MarkerForm> {
     rows.add(row);
   }
 
-  void add_context(List<List<dynamic>> rows, LatLng latlang, String locationName, String trans_mode, String Activ1, String enjoy1, String Activ2, String enjoy2, String Activ3, String enjoy3, String comment){
+  void add_context(List<List<dynamic>> rows, LatLng latlang, String locationName, String trans_mode, String Activ1, String enjoy1, String Activ2, String enjoy2, String Activ3, String enjoy3, String comment) async{
     List<dynamic> row = [];
     List<dynamic> empty = [];
     rows.add(empty);
@@ -59,7 +59,7 @@ class _MarkerFormState extends State<MarkerForm> {
     rows.add(row);
   }
 
-  void _recordvalue(LatLng latlang, String locationName, String trans_mode, String Activ1, String enjoy1, String Activ2, String enjoy2, String Activ3, String enjoy3, String comment) async{
+  Future<String> _recordvalue(LatLng latlang, String locationName, String trans_mode, String Activ1, String enjoy1, String Activ2, String enjoy2, String Activ3, String enjoy3, String comment) async{
     List<List<dynamic>> rows = [];
 
     String csv = "";
@@ -83,6 +83,7 @@ class _MarkerFormState extends State<MarkerForm> {
     final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
     print(fields);
 
+    return("finish writing");
     //await file.delete();
   }
 
@@ -204,12 +205,12 @@ class _MarkerFormState extends State<MarkerForm> {
                     labelText: 'Enjoyment Rating',
                     prefixIcon: Icon(Icons.mood)
                 ),
-                validator: (value) {
+                /*validator: (value) {
                   if (value == null || value.isEmpty || int.parse(value)>10) {
                     return 'Max rate is 10';
                   }
                   return null;
-                },
+                },*/
               ),
 
               SizedBox(height: 20.0),
@@ -236,12 +237,12 @@ class _MarkerFormState extends State<MarkerForm> {
                     labelText: 'Enjoyment Rating',
                     prefixIcon: Icon(Icons.mood)
                 ),
-                validator: (value) {
+                /*validator: (value) {
                   if (value == null || value.isEmpty || int.parse(value)>10) {
                     return 'Max rate is 10';
                   }
                   return null;
-                },
+                },*/
               ),
 
               SizedBox(height: 20.0),

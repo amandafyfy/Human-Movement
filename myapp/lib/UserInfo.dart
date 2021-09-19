@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import './main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';//Import intl in the file this is being done
 import 'package:path_provider/path_provider.dart';
@@ -187,8 +187,10 @@ class _UserInfoState extends State<UserInfo> {
                       _formSubmitted();
                       _setGarminId(garminId!);
                       _generateUserProfile();
-
-                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
+                      );
                     },
                     child: const Text('Save'),
                   ),

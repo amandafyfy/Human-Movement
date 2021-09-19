@@ -156,7 +156,7 @@ class _editLocationState extends State<editLocation> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Enjoyment Rating',
+                    labelText: 'Enjoyment Rating 1-10',
                     prefixIcon: Icon(Icons.mood)
                 ),
                 validator: (value) {
@@ -188,14 +188,17 @@ class _editLocationState extends State<editLocation> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Enjoyment Rating',
+                    labelText: 'Enjoyment Rating 1-10',
                     prefixIcon: Icon(Icons.mood)
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty || int.parse(value)>10) {
-                    return 'Max rate is 10';
+                  if(_Activity2Controller.text != "") {
+                    if (value == null || value.isEmpty ||
+                        int.parse(value) > 10) {
+                      return 'Max rate is 10';
+                    }
+                    return null;
                   }
-                  return null;
                 },
               ),
 
@@ -220,14 +223,17 @@ class _editLocationState extends State<editLocation> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Enjoyment Rating',
+                    labelText: 'Enjoyment Rating 1-10',
                     prefixIcon: Icon(Icons.mood)
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty || int.parse(value)>10) {
-                    return 'Max rate is 10';
+                  if(_Activity3Controller.text != "") {
+                    if (value == null || value.isEmpty ||
+                        int.parse(value) > 10) {
+                      return 'Max rate is 10';
+                    }
+                    return null;
                   }
-                  return null;
                 },
               ),
 

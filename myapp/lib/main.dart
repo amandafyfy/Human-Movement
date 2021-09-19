@@ -7,6 +7,7 @@ import './Registration.dart';
 import './Setting.dart';
 import './UserData.dart';
 import './UserInfo.dart';
+import './Userguide.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -114,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<DataPoint> UserData = [];
   String _garminId = "";
   int _num = 0;
+  bool flag = false;
 
   @override
   void initState() {
@@ -127,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
     locationSubscription = locationStream?.listen(onData);
     _getGarminId();
     _getFileNum();
-    
+    userGuide();
   }
 // @Cathyling
 // get GarminId from shared_preference
@@ -155,7 +157,94 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  
+  Future<bool> setUserState () async{
+    String userProfile = "${_garminId}userProfile.json";
+
+    final directory = await getApplicationDocumentsDirectory();
+    final userInfoPath = "${directory.path}/${userProfile}";
+    File userfile = File(userInfoPath);
+    if(await userfile.exists()){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+
+  Future<bool> setLocationState () async{
+    String location = "locations.csv";
+
+    final directory = await getApplicationDocumentsDirectory();
+    final locationPath = "${directory.path}/${location}";
+    File locations = File(locationPath);
+    if(await locations.exists()){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  Future<bool> userGuide () async{
+    if(await setLocationState() && await setUserState()){
+      setState ((){
+        flag = true;
+        print(flag.toString());
+      });
+    }else{
+      setState ((){
+        flag = false;
+        print(flag.toString());
+      });
+    }
+
+    return flag;
+  }
+
+  Widget firstLink(){
+    return InkWell(
+      child: new Text(
+        'Open user profile',
+        style: TextStyle(
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+        ),
+      ),
+      onTap: () {
+        // Update the state of the app
+        // Then close the drawer
+        Navigator.push(
+          this.context,
+          MaterialPageRoute(builder: (context) => UserInfo()),
+        ).then((value){
+          _getGarminId();
+        });
+      },
+    );
+  }
+
+  Widget secondLink(){
+    return InkWell(
+      child: new Text(
+        'Open Map Setting',
+        style: TextStyle(
+          fontSize: 20,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.bold,
+          color: Colors.red,
+        ),
+      ),
+      onTap: () {
+          Navigator.push(
+            this.context,
+            MaterialPageRoute(builder: (context) => Setting(thislocation: thislocation)),
+          );
+        },
+    );
+  }
+
+  // csv file header
   void add_head(List<List<dynamic>> rows){
     List<dynamic> row = [];
     row.add("date");
@@ -164,6 +253,8 @@ class _MyHomePageState extends State<MyHomePage> {
     row.add("speed");
     rows.add(row);
   }
+
+  // adding new rows to csv file
   void add_context(List<List<dynamic>> rows){
     List<dynamic> row = [];
     rows.add(row);
@@ -300,10 +391,17 @@ class _MyHomePageState extends State<MyHomePage> {
     String msg = 'STOP';
 
     return SizedBox(
-      width: double.maxFinite,
+      width: 100,
+      height: 100,
       child: ElevatedButton(
-        child: Text(msg),
+        child: Icon(Icons.stop_circle_outlined, color: Colors.white, size:60),
         onPressed: stop,
+        style: ElevatedButton.styleFrom(
+          shape: CircleBorder(),
+          padding: EdgeInsets.all(20),
+          primary: Colors.red, // <-- Button color
+          onPrimary: Colors.red, // <-- Splash color
+        ),
       ),
     );
   }
@@ -311,17 +409,31 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget startButton() {
     String msg = 'START';
     return SizedBox(
-      width: double.maxFinite,
+      width: 100,
+      height: 100,
       child: ElevatedButton(
-        child: Text(msg),
+        child: Icon(Icons.not_started_outlined, color: Colors.black, size: 60),
         onPressed: start,
+        style: ElevatedButton.styleFrom(
+          shape: CircleBorder(),
+          padding: EdgeInsets.all(20),
+          primary: Colors.green, // <-- Button color
+          onPrimary: Colors.green, // <-- Splash color
+        ),
       ),
+
     );
   }
 
   Widget status() {
     String msg = _status.toString().split('.').last;
-    return Text("Status: $msg");
+    return Text(
+      "Status: $msg",
+      style: TextStyle(
+        fontSize: 25,
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.bold
+      ),);
   }
 
   Widget lastLoc() {
@@ -329,7 +441,8 @@ class _MyHomePageState extends State<MyHomePage> {
         lastLocation != null
             ? dtoToString(lastLocation)
             : 'Unknown last location',
-        textAlign: TextAlign.center);
+        textAlign: TextAlign.center,
+    );
   }
 
   Widget getButton() {
@@ -342,7 +455,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget deleteButton() {
     return ElevatedButton(
       child: Text("Delete Data collection"),
-      onPressed: _deleteFile,
+        onPressed: () {
+          _deleteFile();
+          Navigator.push(
+            this.context,
+            MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
+          );
+        },
     );
   }
 
@@ -350,9 +469,11 @@ class _MyHomePageState extends State<MyHomePage> {
     final directory = await getApplicationDocumentsDirectory();
     final userpath = directory.path+"/user.csv";
     final locationpath = directory.path+"/locations.csv";
+    final profile = directory.path+"/${_garminId}userProfile.json";
 
     File userfile = File(userpath);
     File locationfile = File(locationpath);
+    File profilefile = File(profile);
 
     print(userfile);
     if(await userfile.exists()){
@@ -361,6 +482,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     if(await locationfile.exists()){
       await locationfile.delete();
+      print("location delete done");
+    }
+    if(await profilefile.exists()){
+      await profilefile.delete();
       print("location delete done");
     }
   }
@@ -389,19 +514,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
       body: Container(
         width: double.maxFinite,
-        padding: const EdgeInsets.all(22),
+        padding: const EdgeInsets.all(40),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              startButton(),
-              stopButton(),
-              Divider(),
-              status(),
-              Divider(),
-              dtoWidget(lastLocation),
-              //getButton(),
-              deleteButton()
+              if(flag)...[
+                SizedBox(height: 30.0),
+                startButton(),
+                SizedBox(height: 30.0),
+                stopButton(),
+                SizedBox(height: 30.0),
+                status(),
+                SizedBox(height: 30.0),
+                dtoWidget(lastLocation),
+                //getButton(),
+                deleteButton()
+              ],
+              if(flag == false)...[
+                firstStep(),
+                firstLink(),
+                SizedBox(height: 30.0),
+                secondStep(),
+                secondLink(),
+              ],
             ],
           ),
         ),
@@ -416,8 +552,8 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Wu"),
-              accountEmail: Text("Wu@gmail.com"),
+              accountName: Text(_garminId),
+              accountEmail: Text(""),
               currentAccountPicture: new CircleAvatar(
                 backgroundColor: Colors.blue,
                 child: new Image.asset('assets/images/Wu.jpg'), //For Image Asset
