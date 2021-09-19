@@ -5,3 +5,5 @@ Data Integrator with GUI/.DS_Store
 Data Integrator with GUI/integrator/.DS_Store
 *.pyc
 .DS_Store
+*.xml
+*.iml
