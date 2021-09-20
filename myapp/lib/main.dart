@@ -391,18 +391,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // @Cathyling 
-  // send file to fire base every 4 minutes
+  // send file to firebase at 10am everyday
   void sendFile() {
     final cron = new Cron();
-    cron.schedule(new Schedule.parse('*/4 * * * *'), () async {
+    cron.schedule(new Schedule.parse('* 10 * * *'), () async {
       _generateCsvFile();
       uploadFile();
     });
   }
-  // write UserData into csv every 2 minutes
+  // write UserData into csv every hour at minute 0
   void writeCSV() {
     final cron = new Cron();
-    cron.schedule(new Schedule.parse('*/2 * * * *'), () async {
+    cron.schedule(new Schedule.parse('0 * * * *'), () async {
       _generateCsvFile();
     });
   }
@@ -628,7 +628,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // ...
                 // Then close the drawer
                 
-                //_generateCsvFile();
+                _generateCsvFile();
                 uploadFile();
                
                 Navigator.popUntil(context, ModalRoute.withName('/'));
