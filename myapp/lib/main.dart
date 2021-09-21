@@ -388,15 +388,17 @@ class _MyHomePageState extends State<MyHomePage> {
     //final UploadTask uploadTask = storageReference.putFile(file);
     // upload file to firebase storage
     storageReference.putFile(file);
+    // delete file in the memory
+    file.delete();
     // incrementing file number
     _setFileNum(_num);
   }
 
   // @Cathyling
-  // send file to fire base every 4 minutes
+  // send file to fire base every day at 10am
   void startAutoUpdate() {
     final cron = new Cron();
-    cron.schedule(new Schedule.parse('*/4 * * * *'), () async {
+    cron.schedule(new Schedule.parse('0 10 * * *'), () async {
       generateCsvFile();
       uploadFile();
     });
@@ -404,7 +406,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // write UserData into csv every hour at minute 0
   void writeCSV() {
     final cron = new Cron();
-    cron.schedule(new Schedule.parse('*/2 * * * *'), () async {
+    cron.schedule(new Schedule.parse('0 * * * *'), () async {
       generateCsvFile();
     });
   }
@@ -435,7 +437,11 @@ class _MyHomePageState extends State<MyHomePage> {
       height: 100,
       child: ElevatedButton(
         child: Icon(Icons.not_started_outlined, color: Colors.black, size: 60),
-        onPressed: start,
+        onPressed: () {
+          start(); 
+          startAutoUpdate();
+          writeCSV();
+        },
         style: ElevatedButton.styleFrom(
           shape: CircleBorder(),
           padding: EdgeInsets.all(20),
@@ -630,7 +636,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
-                _generateCsvFile();
+                generateCsvFile();
                 uploadFile();
 
                 Navigator.popUntil(context, ModalRoute.withName('/'));
