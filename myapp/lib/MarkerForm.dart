@@ -34,6 +34,7 @@ class _MarkerFormState extends State<MarkerForm> {
     row.add("longitude");
     row.add("latitude");
     row.add("locationName");
+    row.add("transport");
     row.add("Activity 1");
     row.add("Enjoyment1");
     row.add("Activity 2");
@@ -111,6 +112,7 @@ class _MarkerFormState extends State<MarkerForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
+                key: Key('location_input'),
                 controller: _locationnameController,
                 autofocus: true,
                 autocorrect: true,
@@ -130,6 +132,7 @@ class _MarkerFormState extends State<MarkerForm> {
               SizedBox(height: 18.0),
 
               TextFormField(
+                key: Key('transport_input'),
                 controller: _transmodeController,
                 autofocus: true,
                 autocorrect: true,
@@ -150,6 +153,7 @@ class _MarkerFormState extends State<MarkerForm> {
               SizedBox(height: 18.0),
 
               TextFormField(
+                key: Key('Activity_one'),
                 controller: _Activity1Controller,
                 autofocus: true,
                 autocorrect: true,
@@ -168,6 +172,7 @@ class _MarkerFormState extends State<MarkerForm> {
               ),
 
               TextFormField(
+                key: Key('Enjoy_one'),
                 controller: _enjoy1Controller,
                 autofocus: true,
                 autocorrect: true,
@@ -252,6 +257,7 @@ class _MarkerFormState extends State<MarkerForm> {
               SizedBox(height: 20.0),
 
               TextFormField(
+                key: Key('comment'),
                 controller: _CommentController,
                 autofocus: true,
                 autocorrect: true,
@@ -268,6 +274,7 @@ class _MarkerFormState extends State<MarkerForm> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints.expand(height: 55.0),
                   child: ElevatedButton(
+                    key: Key("submit"),
                     //style: style,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
