@@ -28,7 +28,7 @@ class _SettingEditState extends State<SettingEdit> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-        title: Text('Map seeting'),
+        title: Text('Visited Places'),
         backgroundColor: Colors.green[700],
         ),
         body: ListView.builder(
