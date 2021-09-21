@@ -16,7 +16,6 @@ class DataPoint {
 
   @override
   String toString() {
-    return 'DataPoint: {unixTime: $date, longitude: $longitude, latitude: $latitude,speed: $speed,}';
+    return 'DataPoint: {date: $date, longitude: $longitude, latitude: $latitude,speed: $speed,}';
   }
-
 }

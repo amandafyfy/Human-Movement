@@ -75,7 +75,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-enum LocationStatus { UNKNOWN, RUNNING, STOPPED }
+enum LocationStatus { UNKNOWN, RECORDING, PAUSED }
 
 String dtoToString(LocationDto dto) =>
     //'Location ${dto.latitude}, ${dto.longitude} at ${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}';
@@ -89,10 +89,7 @@ Widget dtoWidget(LocationDto? dto) {
       children: <Widget>[
         Text(
           '${dto.latitude}, ${dto.longitude}, ${dto.speed}',
-        ),
-        Text(
-          '@',
-        ),
+        )
         //Text('${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}')
       ],
     );
@@ -240,7 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget secondLink() {
     return InkWell(
       child: new Text(
-        'Open Map Setting',
+        'Set Visited Places',
         style: TextStyle(
           fontSize: 20,
           fontStyle: FontStyle.italic,
@@ -261,7 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // csv file header
   void add_head(List<List<dynamic>> rows) {
     List<dynamic> row = [];
-    row.add("date");
+    row.add("unixTime");
     row.add("latitude");
     row.add("longitude");
     row.add("speed");
@@ -338,7 +335,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print(dtoToString(dto));
     setState(() {
       if (_status == LocationStatus.UNKNOWN) {
-        _status = LocationStatus.RUNNING;
+        _status = LocationStatus.RECORDING;
       }
       lastLocation = dto;
       //print(dto.latitude);
@@ -357,14 +354,15 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     locationSubscription = locationStream?.listen(onData);
     await LocationManager().start();
+    startAutoUpload();
     setState(() {
-      _status = LocationStatus.RUNNING;
+      _status = LocationStatus.RECORDING;
     });
   }
 
   void stop() async {
     setState(() {
-      _status = LocationStatus.STOPPED;
+      _status = LocationStatus.PAUSED;
     });
     locationSubscription?.cancel();
     await LocationManager().stop();
@@ -392,7 +390,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // @Cathyling
   // send file to fire base every 1440 minutes or 24 hours
-  void sendFile() {
+  void startAutoUpload() {
+    uploadFile();
     final cron = new Cron();
     cron.schedule(new Schedule.parse('*/1440 * * * *'), () async {
       _generateCsvFile();
@@ -474,8 +473,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget deleteButton() {
     return ElevatedButton(
-      child: Text("Delete Data collection"),
+      child: Text("Upload & Delete Data"),
       onPressed: () {
+        uploadFile();
         _deleteFile();
         Navigator.push(
           this.context,
@@ -624,19 +624,19 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
 
-            ListTile(
-              title: const Text('Upload Data'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
+            // ListTile(
+            // title: const Text('Upload Data'),
+            // onTap: () {
+            // Update the state of the app
+            // ...
+            // Then close the drawer
 
-                _generateCsvFile();
-                uploadFile();
+            // _generateCsvFile();
+            // uploadFile();
 
-                Navigator.popUntil(context, ModalRoute.withName('/'));
-              },
-            ),
+            // Navigator.popUntil(context, ModalRoute.withName('/'));
+            // },
+            // ),
 
             // ListTile(
             // title: const Text('Dialog'),
@@ -662,7 +662,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 // Update the state of the app
                 // Then close the drawer
-                sendFile();
+                startAutoUpload();
                 writeCSV();
               },
             ),
