@@ -213,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget firstLink() {
     return InkWell(
       child: new Text(
-        'Open user profile',
+        'Open Profile',
         style: TextStyle(
           fontSize: 20,
           fontStyle: FontStyle.italic,
@@ -597,7 +597,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // },
             // ),
             ListTile(
-              title: const Text('User Info'),
+              title: const Text('Profile'),
               onTap: () {
                 // Update the state of the app
                 // Then close the drawer
