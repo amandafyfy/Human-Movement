@@ -35,8 +35,12 @@ class _MarkerFormState extends State<MarkerForm> {
     row.add("latitude");
     row.add("locationName");
     row.add("Activity 1");
+    row.add("Enjoyment1");
     row.add("Activity 2");
+    row.add("Enjoyment2");
     row.add("Activity 3");
+    row.add("Enjoyment3");
+    row.add("Comment");
     rows.add(row);
   }
 
