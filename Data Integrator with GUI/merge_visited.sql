@@ -20,22 +20,4 @@ LEFT JOIN visitedPlaces AS VP
     ON R.latitude = VP.latitude 
         AND R.longitude = VP.longitude;
 
-
-/* 
-SELECT  id, date, speed, lat4, long4,
-        visitedPlaces.locationName, visitedPlaces.Activity1, visitedPlaces.Activity2,
-        visitedPlaces.Activity3
-FROM (SELECT *, ROUND(records.latitude,4) AS lat4 , ROUND(records.longitude,4) AS long4 FROM records) AS records
-LEFT JOIN 
-    (SELECT ROUND(visitedPlaces.latitude,4) AS lat4_vis , 
-        ROUND(visitedPlaces.longitude,4) AS long4_vis, 
-        visitedPlaces.id AS id_vis, 
-        visitedPlaces.longitude AS long_vis, 
-        visitedPlaces.latitude AS lat_vis,
-        visitedPlaces.locationName, visitedPlaces.Activity1, visitedPlaces.Activity2,
-        visitedPlaces.Activity3
-
-    FROM visitedPlaces) as visitedPlaces
-    ON lat4 = lat4_vis AND long4 = long4_vis AND id = id_vis;
-*/
 .output stdout
