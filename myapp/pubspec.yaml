@@ -39,10 +39,14 @@ dependencies:
   # Upload file to firebase
   firebase_core: ^1.0.3
   firebase_storage: ^8.0.3
+  cron: ^0.3.2
+  shared_preferences: ^2.0.7
 
 dev_dependencies:
+  test: ^1.17.12
   flutter_test:
     sdk: flutter
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

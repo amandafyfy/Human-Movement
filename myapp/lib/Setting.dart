@@ -79,6 +79,7 @@ class _SettingState extends State<Setting> {
 
   @override
   void initState() {
+    super.initState();
     _readfile();
   }
 

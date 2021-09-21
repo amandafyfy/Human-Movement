@@ -1,11 +1,12 @@
 import 'dart:convert';
-
+import './main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';//Import intl in the file this is being done
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class UserInfo extends StatefulWidget {
@@ -24,7 +25,7 @@ class _UserInfoState extends State<UserInfo> {
   String? garminId;
   String? stravaId;
   String? gender;
-  String? dob;
+  // String? dob;
   String? numOfvehicle;
   String? vehicleType;
   
@@ -39,16 +40,25 @@ class _UserInfoState extends State<UserInfo> {
   
   void _generateUserProfile() async{
     Map<String, dynamic> _userInfo = {'UserName': name, 'GarminId': garminId, 
-    'StravaId': stravaId, 'Gender': gender, 'DoB': dob, 'NumberOfVehicle': numOfvehicle, 'VehicleType': vehicleType};
+    'StravaId': stravaId, 'Gender': gender,  'NumberOfVehicle': numOfvehicle, 'VehicleType': vehicleType};
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
-    File file = File('$path/userProfile.json');
+    File file = File('$path/${garminId}userProfile.json');
     // write user info into a json file
     file.writeAsString(jsonEncode(_userInfo));
-    // upload file to firebase
-    final destination = 'files/userProfile.json';
+    // set file path on firebase storage
+    final destination = '$garminId/${garminId}userProfile.json';
     Reference storageReference = FirebaseStorage.instance.ref().child("$destination");
+    // upload file to firebase
     final UploadTask uploadTask = storageReference.putFile(file);
+  }
+  // store GarminId to shared_preference
+  void _setGarminId(String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("GarminId", value);    
+    // String gId = (prefs.getString('GarminId') ?? "");
+    // print("get ${gId}");
+
   }
   
   @override
@@ -175,13 +185,14 @@ class _UserInfoState extends State<UserInfo> {
                       // Validate will return true if the form is valid, or false if
                       // the form is invalid.
                       _formSubmitted();
+                      _setGarminId(garminId!);
                       _generateUserProfile();
-
-                      if (_formKey.currentState!.validate()) {
-                        // Process data.
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
+                      );
                     },
-                    child: const Text('Saved'),
+                    child: const Text('Save'),
                   ),
                 ),
               ],
