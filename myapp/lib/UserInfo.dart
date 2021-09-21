@@ -68,7 +68,7 @@ class _UserInfoState extends State<UserInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Information'),
+        title: Text('Profile'),
         centerTitle: true,
         backgroundColor: Colors.blue,
       ),

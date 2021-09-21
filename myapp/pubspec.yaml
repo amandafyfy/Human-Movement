@@ -43,8 +43,10 @@ dependencies:
   shared_preferences: ^2.0.7
 
 dev_dependencies:
+  test: ^1.17.12
   flutter_test:
     sdk: flutter
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

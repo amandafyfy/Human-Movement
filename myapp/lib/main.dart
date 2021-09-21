@@ -101,7 +101,8 @@ Widget dtoWidget(LocationDto? dto) {
 class _MyHomePageState extends State<MyHomePage> {
   final account_Info default_info = new account_Info("", "", "");
   String logStr = '';
-  LocationDto lastLocation = LocationDto.fromJson({"key": "value"});
+  LocationDto?
+      lastLocation; //= LocationDto.fromJson({ "key": "12", "key2": "13"});
   location thislocation = location(115.857048, -31.953512);
   DateTime? lastTimeLocation;
   Stream<LocationDto>? locationStream;
@@ -261,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // csv file header
   void add_head(List<List<dynamic>> rows) {
     List<dynamic> row = [];
-    row.add("date");
+    row.add("unixTime");
     row.add("latitude");
     row.add("longitude");
     row.add("speed");
@@ -285,7 +286,7 @@ class _MyHomePageState extends State<MyHomePage> {
     UserData = [];
   }
 
-  void _generateCsvFile() async {
+  void generateCsvFile() async {
     // generate file name
     String file_name = "${_garminId}${_num}.csv";
     List<List<dynamic>> rows = [];
@@ -357,6 +358,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     locationSubscription = locationStream?.listen(onData);
     await LocationManager().start();
+    startAutoUpdate();
     setState(() {
       _status = LocationStatus.RUNNING;
     });
@@ -390,20 +392,20 @@ class _MyHomePageState extends State<MyHomePage> {
     _setFileNum(_num);
   }
 
-  // @Cathyling 
-  // send file to firebase at 10am everyday
-  void sendFile() {
+  // @Cathyling
+  // send file to fire base every 4 minutes
+  void startAutoUpdate() {
     final cron = new Cron();
-    cron.schedule(new Schedule.parse('* 10 * * *'), () async {
-      _generateCsvFile();
+    cron.schedule(new Schedule.parse('*/4 * * * *'), () async {
+      generateCsvFile();
       uploadFile();
     });
   }
   // write UserData into csv every hour at minute 0
   void writeCSV() {
     final cron = new Cron();
-    cron.schedule(new Schedule.parse('0 * * * *'), () async {
-      _generateCsvFile();
+    cron.schedule(new Schedule.parse('*/2 * * * *'), () async {
+      generateCsvFile();
     });
   }
 
@@ -455,14 +457,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget lastLoc() {
+  /**Widget lastLoc() {
     return Text(
-      lastLocation != null
-          ? dtoToString(lastLocation)
-          : 'Unknown last location',
-      textAlign: TextAlign.center,
+        lastLocation != null
+            ? dtoToString(lastLocation)
+            : 'Unknown last location',
+        textAlign: TextAlign.center,
     );
-  }
+  }*/
 
   Widget getButton() {
     return ElevatedButton(
@@ -518,7 +520,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("MAIN PAGE"),
         /**leading: Builder(builder: (context) {
           return IconButton(
             icon: Icon(Icons.home, color: Colors.white), //dynamic icon
@@ -584,19 +586,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     new Image.asset('assets/images/Wu.jpg'), //For Image Asset
               ),
             ),
-            // ListTile(
-            // title: const Text('Login'),
-            // onTap: () {
-            // Update the state of the app
-            // Then close the drawer
-            // Navigator.push(
-            // context,
-            // MaterialPageRoute(builder: (context) => Login(info: default_info)),
-            // );
-            // },
-            // ),
+            /**ListTile(
+              title: const Text('Login'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login(info: default_info)),
+                );
+              },
+            ),*/
             ListTile(
-              title: const Text('User Info'),
+              title: const Text('Profile'),
               onTap: () {
                 // Update the state of the app
                 // Then close the drawer
@@ -622,7 +624,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
             ),
-
             ListTile(
               title: const Text('Upload Data'),
               onTap: () {
@@ -635,32 +636,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               },
             ),
-
-            // ListTile(
-            // title: const Text('Dialog'),
-            // onTap: () {
+            //ListTile(
+            //title: const Text('Dialog'),
+            //onTap: () {
             // Update the state of the app
             // Then close the drawer
-            // Navigator.push(
-            // context,
-            // MaterialPageRoute(builder: (context) => Dialog()),
-            // );
-            // },
-            // ),
-            // ListTile(
-            // title: const Text('Display file'),
-            // onTap: () {
+            //Navigator.push(
+            //context,
+            //MaterialPageRoute(builder: (context) => Dialog()),
+            //);
+            //},
+            //),
+            //ListTile(
+            //title: const Text('display file'),
+            //onTap: () {
             // Update the state of the app
             // Then close the drawer
-            // _generateCsvFile();
-            // },
-            // ),
+            //generateCsvFile();
+            //},
+            //),
             ListTile(
               title: const Text('Start Auto Upload'),
               onTap: () {
                 // Update the state of the app
                 // Then close the drawer
-                sendFile();
+                startAutoUpdate();
                 writeCSV();
               },
             ),
