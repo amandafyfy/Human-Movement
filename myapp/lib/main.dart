@@ -18,8 +18,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cron/cron.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const fetchBackground = "fetchBackground";
 
+
+const fetchBackground = "fetchBackground";
 class location {
   double longitude;
   double latitude;
@@ -30,7 +31,7 @@ class location {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
-
+  
   runApp(MyApp());
 }
 
@@ -75,13 +76,14 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-enum LocationStatus { UNKNOWN, RECORDING, PAUSED }
+enum LocationStatus { UNKNOWN, RUNNING, STOPPED }
 
 String dtoToString(LocationDto dto) =>
     //'Location ${dto.latitude}, ${dto.longitude} at ${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}';
     'Location ${dto.latitude}, ${dto.longitude} at ${dto.time}';
 
 Widget dtoWidget(LocationDto? dto) {
+
   if (dto == null)
     return Text("No location yet");
   else
@@ -89,17 +91,22 @@ Widget dtoWidget(LocationDto? dto) {
       children: <Widget>[
         Text(
           '${dto.latitude}, ${dto.longitude}, ${dto.speed}',
-        )
+        ),
+        Text(
+          '@',
+        ),
         //Text('${DateTime.fromMillisecondsSinceEpoch(dto.time.toInt())}')
       ],
     );
 }
 
+
 class _MyHomePageState extends State<MyHomePage> {
-  final account_Info default_info = new account_Info("", "", "");
+
+  final account_Info default_info = new account_Info("","","");
   String logStr = '';
-  LocationDto lastLocation = LocationDto.fromJson({"key": "value"});
-  location thislocation = location(115.857048, -31.953512);
+  LocationDto? lastLocation; //= LocationDto.fromJson({ "key": "12", "key2": "13"});
+  location thislocation = location(115.857048,-31.953512);
   DateTime? lastTimeLocation;
   Stream<LocationDto>? locationStream;
   StreamSubscription<LocationDto>? locationSubscription;
@@ -124,15 +131,15 @@ class _MyHomePageState extends State<MyHomePage> {
     _getGarminId();
     _getFileNum();
     userGuide();
-  }
 
+  }
 // @Cathyling
 // get GarminId from shared_preference
   void _getGarminId() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _garminId = (prefs.getString('GarminId') ?? "");
-    });
+      final prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _garminId = (prefs.getString('GarminId')?? "");
+      });
   }
 
 // get file number from shared_preference
@@ -146,25 +153,25 @@ class _MyHomePageState extends State<MyHomePage> {
 // incrementing file number and save it in shared_preference
   void _setFileNum(int n) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('file number', n + 1);
+    prefs.setInt('file number', n+1);
     setState(() {
       _num = n + 1;
     });
   }
 
-  Future<bool> setUserState() async {
+  Future<bool> setUserState () async{
     //String userProfile = "${_garminId}userProfile.json";
     final directory = await getApplicationDocumentsDirectory();
     final userInfoPath = "${directory.path}/${_garminId}userProfile.json";
     File userfile = File(userInfoPath);
-    if (await userfile.exists()) {
-      setState(() {
+    if(await userfile.exists()){
+      setState ((){
         firstState = true;
 
         print("first" + firstState.toString());
       });
-    } else {
-      setState(() {
+    }else{
+      setState ((){
         firstState = false;
         print("first" + firstState.toString());
       });
@@ -172,19 +179,20 @@ class _MyHomePageState extends State<MyHomePage> {
     return firstState;
   }
 
-  Future<bool> setLocationState() async {
+
+  Future<bool> setLocationState () async{
     String location = "locations.csv";
 
     final directory = await getApplicationDocumentsDirectory();
     final locationPath = "${directory.path}/${location}";
     File locations = File(locationPath);
-    if (await locations.exists()) {
-      setState(() {
+    if(await locations.exists()){
+      setState ((){
         secondState = true;
         print("second" + secondState.toString());
       });
-    } else {
-      setState(() {
+    }else{
+      setState ((){
         secondState = false;
         print("second" + secondState.toString());
       });
@@ -192,16 +200,16 @@ class _MyHomePageState extends State<MyHomePage> {
     return secondState;
   }
 
-  Future<bool> userGuide() async {
+  Future<bool> userGuide () async{
     await setUserState();
     await setLocationState();
-    if (firstState && secondState) {
-      setState(() {
+    if(firstState && secondState){
+      setState ((){
         flag = true;
         print(flag.toString());
       });
-    } else {
-      setState(() {
+    }else{
+      setState ((){
         flag = false;
         print(flag.toString());
       });
@@ -210,15 +218,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return flag;
   }
 
-  Widget firstLink() {
+  Widget firstLink(){
     return InkWell(
       child: new Text(
-        'Open Profile',
+        'Open user profile',
         style: TextStyle(
-          fontSize: 20,
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.bold,
-          color: Colors.red,
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
         ),
       ),
       onTap: () {
@@ -227,17 +235,17 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.push(
           this.context,
           MaterialPageRoute(builder: (context) => UserInfo()),
-        ).then((value) {
+        ).then((value){
           _getGarminId();
         });
       },
     );
   }
 
-  Widget secondLink() {
+  Widget secondLink(){
     return InkWell(
       child: new Text(
-        'Set Visited Places',
+        'Open Map Setting',
         style: TextStyle(
           fontSize: 20,
           fontStyle: FontStyle.italic,
@@ -246,19 +254,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       onTap: () {
-        Navigator.push(
-          this.context,
-          MaterialPageRoute(
-              builder: (context) => Setting(thislocation: thislocation)),
-        );
-      },
+          Navigator.push(
+            this.context,
+            MaterialPageRoute(builder: (context) => Setting(thislocation: thislocation)),
+          );
+        },
     );
   }
 
   // csv file header
-  void add_head(List<List<dynamic>> rows) {
+  void add_head(List<List<dynamic>> rows){
     List<dynamic> row = [];
-    row.add("unixTime");
+    row.add("date");
     row.add("latitude");
     row.add("longitude");
     row.add("speed");
@@ -266,7 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // adding new rows to csv file
-  void add_context(List<List<dynamic>> rows) {
+  void add_context(List<List<dynamic>> rows){
     List<dynamic> row = [];
     rows.add(row);
 
@@ -281,8 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     UserData = [];
   }
-
-  void _generateCsvFile() async {
+  void generateCsvFile() async{
     // generate file name
     String file_name = "${_garminId}${_num}.csv";
     List<List<dynamic>> rows = [];
@@ -293,12 +299,12 @@ class _MyHomePageState extends State<MyHomePage> {
     print("path:" + path);
 
     File file = File(path);
-    if (await file.exists()) {
+    if(await file.exists()){
       add_context(rows);
       csv = const ListToCsvConverter().convert(rows);
       await file.writeAsString(csv, mode: FileMode.append);
       UserData.clear();
-    } else {
+    }else{
       // create csv file
       await file.create();
       add_head(rows);
@@ -309,23 +315,19 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     final input = new File(path).openRead();
-    final fields = await input
-        .transform(utf8.decoder)
-        .transform(new CsvToListConverter())
-        .toList();
+    final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
     print(fields);
     //await file.delete();
   }
 
-  void setDatapoint(LocationDto dto) {
+  void setDatapoint(LocationDto dto){
     //String time = DateTime.fromMillisecondsSinceEpoch(dto.time.toInt()).toString();
     double time = dto.time;
-    DataPoint segment =
-        new DataPoint(time, dto.longitude, dto.latitude, dto.speed);
+    DataPoint segment = new DataPoint(time, dto.longitude, dto.latitude, dto.speed);
     UserData.add(segment);
   }
 
-  void onGetCurrentData() {
+  void onGetCurrentData(){
     //LocationDto dto = await LocationManager().getCurrentLocation();
     UserData.forEach((element) => print(element.toString()));
     UserData.clear();
@@ -335,7 +337,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print(dtoToString(dto));
     setState(() {
       if (_status == LocationStatus.UNKNOWN) {
-        _status = LocationStatus.RECORDING;
+        _status = LocationStatus.RUNNING;
       }
       lastLocation = dto;
       //print(dto.latitude);
@@ -354,15 +356,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     locationSubscription = locationStream?.listen(onData);
     await LocationManager().start();
-    startAutoUpload();
     setState(() {
-      _status = LocationStatus.RECORDING;
+      _status = LocationStatus.RUNNING;
     });
   }
 
   void stop() async {
     setState(() {
-      _status = LocationStatus.PAUSED;
+      _status = LocationStatus.STOPPED;
     });
     locationSubscription?.cancel();
     await LocationManager().stop();
@@ -371,7 +372,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // @Cathyling
   // user upload the csv file
   void uploadFile() async {
-    final directory = await getApplicationDocumentsDirectory();
+    final directory =  await getApplicationDocumentsDirectory();
     String file_name = "${_garminId}${_num}.csv";
     final path = "${directory.path}/${file_name}";
     File file = File(path);
@@ -379,34 +380,31 @@ class _MyHomePageState extends State<MyHomePage> {
     final destination = '${_garminId}/$file_name';
     print(path);
     print(destination);
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child("$destination");
+    Reference storageReference = FirebaseStorage.instance.ref().child("$destination");
     //final UploadTask uploadTask = storageReference.putFile(file);
-    // upload file to firebase storage
+    // upload file to firebase storage 
     storageReference.putFile(file);
     // incrementing file number
     _setFileNum(_num);
   }
 
-  // @Cathyling
-  // send file to fire base every 1440 minutes or 24 hours
-  void startAutoUpload() {
-    uploadFile();
+  // @Cathyling 
+  // send file to fire base every 4 minutes
+  void sendFile() {
     final cron = new Cron();
-    cron.schedule(new Schedule.parse('*/1440 * * * *'), () async {
-      _generateCsvFile();
+    cron.schedule(new Schedule.parse('*/4 * * * *'), () async {
+      generateCsvFile();
       uploadFile();
     });
   }
-
   // write UserData into csv every 2 minutes
   void writeCSV() {
     final cron = new Cron();
     cron.schedule(new Schedule.parse('*/2 * * * *'), () async {
-      _generateCsvFile();
+      generateCsvFile();
     });
   }
-
+  
   Widget stopButton() {
     String msg = 'STOP';
 
@@ -414,7 +412,7 @@ class _MyHomePageState extends State<MyHomePage> {
       width: 100,
       height: 100,
       child: ElevatedButton(
-        child: Icon(Icons.stop_circle_outlined, color: Colors.white, size: 60),
+        child: Icon(Icons.stop_circle_outlined, color: Colors.white, size:60),
         onPressed: stop,
         style: ElevatedButton.styleFrom(
           shape: CircleBorder(),
@@ -441,6 +439,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPrimary: Colors.green, // <-- Splash color
         ),
       ),
+
     );
   }
 
@@ -449,20 +448,20 @@ class _MyHomePageState extends State<MyHomePage> {
     return Text(
       "Status: $msg",
       style: TextStyle(
-          fontSize: 25,
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.bold),
-    );
+        fontSize: 25,
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.bold
+      ),);
   }
 
-  Widget lastLoc() {
+  /**Widget lastLoc() {
     return Text(
-      lastLocation != null
-          ? dtoToString(lastLocation)
-          : 'Unknown last location',
-      textAlign: TextAlign.center,
+        lastLocation != null
+            ? dtoToString(lastLocation)
+            : 'Unknown last location',
+        textAlign: TextAlign.center,
     );
-  }
+  }*/
 
   Widget getButton() {
     return ElevatedButton(
@@ -473,38 +472,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget deleteButton() {
     return ElevatedButton(
-      child: Text("Upload & Delete Data"),
-      onPressed: () {
-        uploadFile();
-        _deleteFile();
-        Navigator.push(
-          this.context,
-          MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
-        );
-      },
+      child: Text("Delete Data collection"),
+        onPressed: () {
+          _deleteFile();
+          Navigator.push(
+            this.context,
+            MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
+          );
+        },
     );
   }
 
-  void _deleteFile() async {
+  void _deleteFile() async{
     final directory = await getApplicationDocumentsDirectory();
-    final userpath = directory.path + "/user.csv";
-    final locationpath = directory.path + "/locations.csv";
-    final profile = directory.path + "/${_garminId}userProfile.json";
+    final userpath = directory.path+"/user.csv";
+    final locationpath = directory.path+"/locations.csv";
+    final profile = directory.path+"/${_garminId}userProfile.json";
 
     File userfile = File(userpath);
     File locationfile = File(locationpath);
     File profilefile = File(profile);
 
     print(userfile);
-    if (await userfile.exists()) {
+    if(await userfile.exists()){
       await userfile.delete();
       print("user delete done");
     }
-    if (await locationfile.exists()) {
+    if(await locationfile.exists()){
       await locationfile.delete();
       print("location delete done");
     }
-    if (await profilefile.exists()) {
+    if(await profilefile.exists()){
       await profilefile.delete();
       print("location delete done");
     }
@@ -519,7 +517,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("MAIN PAGE"),
         /**leading: Builder(builder: (context) {
           return IconButton(
             icon: Icon(Icons.home, color: Colors.white), //dynamic icon
@@ -539,7 +537,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              if (flag) ...[
+              if(flag)...[
                 SizedBox(height: 30.0),
                 startButton(),
                 SizedBox(height: 30.0),
@@ -551,13 +549,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 //getButton(),
                 deleteButton()
               ],
-              if (flag == false) ...[
-                if (!firstState) ...[
+              if(flag == false)...[
+                if(!firstState)...[
                   SizedBox(height: 30.0),
                   firstStep(),
                   firstLink(),
                 ],
-                if (!secondState) ...[
+                if(!secondState)...[
                   SizedBox(height: 30.0),
                   secondStep(),
                   secondLink(),
@@ -581,88 +579,85 @@ class _MyHomePageState extends State<MyHomePage> {
               accountEmail: Text(""),
               currentAccountPicture: new CircleAvatar(
                 backgroundColor: Colors.blue,
-                child:
-                    new Image.asset('assets/images/Wu.jpg'), //For Image Asset
+                child: new Image.asset('assets/images/Wu.jpg'), //For Image Asset
               ),
             ),
-            // ListTile(
-            // title: const Text('Login'),
-            // onTap: () {
-            // Update the state of the app
-            // Then close the drawer
-            // Navigator.push(
-            // context,
-            // MaterialPageRoute(builder: (context) => Login(info: default_info)),
-            // );
-            // },
-            // ),
+            /**ListTile(
+              title: const Text('Login'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login(info: default_info)),
+                );
+              },
+            ),*/
             ListTile(
-              title: const Text('Profile'),
+              title: const Text('User Info'),
               onTap: () {
                 // Update the state of the app
                 // Then close the drawer
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserInfo()),
-                ).then((value) {
+                ).then((value){
                   _getGarminId();
                 });
               },
             ),
             ListTile(
-              title: const Text('Visited Places'),
+              title: const Text('Setting'),
               onTap: () {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          Setting(thislocation: thislocation)),
+                  MaterialPageRoute(builder: (context) => Setting(thislocation: thislocation)),
                 );
               },
             ),
 
-            // ListTile(
-            // title: const Text('Upload Data'),
-            // onTap: () {
-            // Update the state of the app
-            // ...
-            // Then close the drawer
-
-            // _generateCsvFile();
-            // uploadFile();
-
-            // Navigator.popUntil(context, ModalRoute.withName('/'));
-            // },
-            // ),
-
-            // ListTile(
-            // title: const Text('Dialog'),
-            // onTap: () {
-            // Update the state of the app
-            // Then close the drawer
-            // Navigator.push(
-            // context,
-            // MaterialPageRoute(builder: (context) => Dialog()),
-            // );
-            // },
-            // ),
-            // ListTile(
-            // title: const Text('Display file'),
-            // onTap: () {
-            // Update the state of the app
-            // Then close the drawer
-            // _generateCsvFile();
-            // },
-            // ),
             ListTile(
-              title: const Text('Start Auto Upload'),
+              title: const Text('Upload file'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                
+                //generateCsvFile();
+                uploadFile();
+               
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              },
+            ),
+
+            ListTile(
+              title: const Text('Dialog'),
               onTap: () {
                 // Update the state of the app
                 // Then close the drawer
-                startAutoUpload();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Dialog()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('display file'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                generateCsvFile();
+              },
+            ),
+            ListTile(
+              title: const Text('share data'),
+              onTap: () {
+                // Update the state of the app
+                // Then close the drawer
+                sendFile();
                 writeCSV();
               },
             ),

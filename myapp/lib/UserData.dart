@@ -18,4 +18,5 @@ class DataPoint {
   String toString() {
     return 'DataPoint: {date: $date, longitude: $longitude, latitude: $latitude,speed: $speed,}';
   }
+
 }
