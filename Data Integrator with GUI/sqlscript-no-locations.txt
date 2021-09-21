@@ -5,8 +5,9 @@
 
 .output output/finalData.csv
 
-SELECT * FROM (SELECT ROUND(latitude,4) AS lat4 , ROUND(longitude,4) AS long4, * FROM records)
-LEFT JOIN (SELECT ROUND(latitude,4) AS lat4 , ROUND(longitude,4) AS long4, * FROM visitedPlaces)
-USING (id, lat4, long4);
+SELECT ROUND(records.latitude,4) AS lat4 , ROUND(records.longitude,4) AS long4, * FROM records
+LEFT JOIN (SELECT ROUND(visitedPlaces.latitude,4) AS lat4_vis , ROUND(visitedPlaces.longitude,4) AS long4_vis, 
+visitedPlaces.id AS id_vis, visitedPlaces.longitude AS long_vis, visitedPlaces.latitude AS lat_vis FROM visitedPlaces)
+ON lat4 = lat4_vis AND long4 = long4_vis AND id = id_vis;
 
 .output stdout

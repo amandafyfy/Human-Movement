@@ -5,7 +5,7 @@
 import time
 import os
 from pathlib import Path
-
+from gpx_csv_converter import Converter
 from PyQt5.QtCore import QObject, pyqtSignal
 
 
@@ -32,39 +32,58 @@ class Integrator(QObject):
             self.integratedFile.emit(newPath)
         self.progressed.emit(0)  # Reset the progress
         self.finished.emit()
+        
+
         cmd = '''
 
         head -1 data/records1.csv > output/finalData.csv
         tail -n +2 -q data/records*.csv >> output/finalData.csv
-
+        cat output/finalData.csv
         FILE_loc=data/locations.csv
-        FILE_garmin=data/garmin.csv
+        FILE_garmin=data/garmin_gpx.gpx
         FILE_vis=data/visited_places.csv
+        
+        if [[ -f "$FILE_garmin" ]]; then
+            echo "Garmin File Exists -> Creating Garming CSV"
+            gpx_converter --function "gpx_to_csv" --input_file "$FILE_garmin" --output_file "data/output_garmin.csv"
+        fi
 
         if [[ -f "$FILE_vis" && -f "$FILE_loc" && -f "$FILE_garmin" ]]; then
-            sqlite3 < sqlscript-no-locations.txt
-            sqlite3 < sqlscript.txt
-            sqlite3 < sqlscript_garmin.txt
-        elif [[ -f "$FILE_vis" && -f "$FILE_loc" ]]; then
-            sqlite3 < sqlscript-no-locations.txt
-            echo "Amanda"
+            echo "4 Files Provided -> Merging"
+            sqlite3 < merge_visited.sql
+            sqlite3 < merge_locations.sql
+            sqlite3 < merge_garmin.sql
             cat output/finalData.csv
-            sqlite3 < sqlscript.txt
+            mv data/*.gpx data/Integrated\ Data/
+        elif [[ -f "$FILE_vis" && -f "$FILE_loc" ]]; then
+            echo "3 Files Provided -> Merging"
+            sqlite3 < merge_visited.sql
+            
+            sqlite3 < merge_locations.sql
         elif [[ -f "$FILE_vis" && -f "$FILE_garmin" ]]; then
-            sqlite3 < sqlscript-no-locations.txt
-            sqlite3 < sqlscript_garmin.txt
+            echo "3 Files Provided -> Merging"
+            sqlite3 < merge_visited.sql
+            sqlite3 < merge_garmin.sql
+            mv data/*.gpx data/Integrated\ Data/
         elif [[ -f "$FILE_loc" && -f "$FILE_garmin" ]]; then
-            sqlite3 < sqlscript.txt
-            sqlite3 < sqlscript_garmin.txt
+            echo "3 Files Provided -> Merging"
+            sqlite3 < merge_locations.sql
+            sqlite3 < merge_garmin.sql
+            mv data/*.gpx data/Integrated\ Data/
         elif [ -f "$FILE_vis" ]; then
-            sqlite3 < sqlscript-no-locations.txt
+            echo "2 Files Provided -> Merging"
+            sqlite3 < merge_visited.sql
         elif [ -f "$FILE_loc" ]; then
-            sqlite3 < sqlscript.txt
+            echo "2 Files Provided -> Merging"
+            sqlite3 < merge_locations.sql
         elif [ -f "$FILE_garmin" ]; then
-            sqlite3 < sqlscript_garmin.txt
+            echo "2 Files Provided -> Merging"
+            sqlite3 < merge_garmin.sql
+            mv data/*.gpx data/Integrated\ Data/
         fi
 
         mv data/*.csv data/Integrated\ Data/
+        
 
         '''
         os.system(cmd)
