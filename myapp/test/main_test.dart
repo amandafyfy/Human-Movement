@@ -41,7 +41,7 @@ void main(){
 
   /** setUserState test function*/
   test('add headers to csv ', () {
-    List<dynamic> row = ["date","latitude","longitude", "speed"];
+    List<dynamic> row = ["unixTime","latitude","longitude", "speed"];
     List<List<dynamic>> rows = [];
     new MyHomePage(title: 'Flutter Demo Home Page').createState().add_head(rows);
     expect(row, rows.first);

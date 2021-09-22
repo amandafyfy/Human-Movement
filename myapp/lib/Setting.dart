@@ -143,6 +143,7 @@ class _SettingState extends State<Setting> {
             Align(
               alignment: Alignment.bottomCenter,
               child: new FloatingActionButton.extended(
+                key: Key('finish'),
                 heroTag: null,
                 onPressed: () {
                   uploadFile();
@@ -160,6 +161,7 @@ class _SettingState extends State<Setting> {
             Align(
               alignment: Alignment.centerRight,
               child: new FloatingActionButton.extended(
+                key: Key('edit'),
                 heroTag: null,
                 onPressed: () {
                   Navigator.push(
