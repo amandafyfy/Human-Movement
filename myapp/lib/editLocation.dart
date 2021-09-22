@@ -93,6 +93,7 @@ class _editLocationState extends State<editLocation> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
+                key: Key('location_input'),
                 controller: _locationnameController,
                 autofocus: true,
                 autocorrect: true,
@@ -112,6 +113,7 @@ class _editLocationState extends State<editLocation> {
               SizedBox(height: 18.0),
 
               TextFormField(
+                key: Key('transport_input'),
                 controller: _transmodeController,
                 autofocus: true,
                 autocorrect: true,
@@ -132,6 +134,7 @@ class _editLocationState extends State<editLocation> {
               SizedBox(height: 18.0),
 
               TextFormField(
+                key: Key('Activity_one'),
                 controller: _Activity1Controller,
                 autofocus: true,
                 autocorrect: true,
@@ -150,6 +153,7 @@ class _editLocationState extends State<editLocation> {
               ),
 
               TextFormField(
+                key: Key('Enjoy_one'),
                 controller: _enjoy1Controller,
                 autofocus: true,
                 autocorrect: true,
@@ -240,6 +244,7 @@ class _editLocationState extends State<editLocation> {
               SizedBox(height: 20.0),
 
               TextFormField(
+                key: Key('comment'),
                 controller: _CommentController,
                 autofocus: true,
                 autocorrect: true,
@@ -256,6 +261,7 @@ class _editLocationState extends State<editLocation> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints.expand(height: 55.0),
                   child: ElevatedButton(
+                    key: Key('confirm'),
                     //style: style,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {

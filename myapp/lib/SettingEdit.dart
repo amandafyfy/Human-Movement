@@ -111,6 +111,7 @@ class _PostState extends State<Post> {
             ),
           ),
           new FloatingActionButton.extended(
+            key: Key('edit'),
             heroTag: null,
             onPressed: () {
               Navigator.push(
@@ -124,6 +125,7 @@ class _PostState extends State<Post> {
             backgroundColor: Colors.red,
           ),
           new FloatingActionButton.extended(
+            key: Key('delete'),
             heroTag: null,
             onPressed: () {
               deleteLocation(widget.item[2]);

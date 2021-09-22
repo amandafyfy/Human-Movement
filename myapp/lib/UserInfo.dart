@@ -168,6 +168,7 @@ class _UserInfoState extends State<UserInfo> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
+                  key: Key('Submit'),
                   onPressed: () {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
