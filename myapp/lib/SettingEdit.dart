@@ -28,15 +28,15 @@ class _SettingEditState extends State<SettingEdit> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-        title: Text('Map seeting'),
-        backgroundColor: Colors.green[700],
+          title: Text('Visited Places'),
+          backgroundColor: Colors.green[700],
         ),
         body: ListView.builder(
           itemCount: widget.field.length,
           itemBuilder: (context, index) {
-            if(index<2) {
+            if (index < 2) {
               return Container();
-            }else{
+            } else {
               final item = widget.field[index];
               return Post(item: item);
             }
@@ -45,11 +45,9 @@ class _SettingEditState extends State<SettingEdit> {
             ),*/
           },
         ),
-
-        ),
-      );
+      ),
+    );
   }
-
 }
 
 class Post extends StatefulWidget {
@@ -61,8 +59,7 @@ class Post extends StatefulWidget {
 }
 
 class _PostState extends State<Post> {
-
-  void deleteLocation(String name) async{
+  void deleteLocation(String name) async {
     String csv = "";
 
     final directory = await getApplicationDocumentsDirectory();
@@ -70,9 +67,12 @@ class _PostState extends State<Post> {
     print("path:" + path);
 
     final input = new File(path).openRead();
-    final fields = await input.transform(utf8.decoder).transform(new CsvToListConverter()).toList();
+    final fields = await input
+        .transform(utf8.decoder)
+        .transform(new CsvToListConverter())
+        .toList();
 
-    for(int i =2; i<fields.length; i++) {
+    for (int i = 2; i < fields.length; i++) {
       List<dynamic> element = [];
       element = fields[i];
       if (element[2] == name) {
@@ -90,53 +90,55 @@ class _PostState extends State<Post> {
 
   @override
   Widget build(BuildContext context) {
-    location thislocation = new location(0.0,0.0);
+    location thislocation = new location(0.0, 0.0);
     thislocation.longitude = widget.item[0];
     thislocation.latitude = widget.item[1];
 
     //String name = widget.item[2];
-      return Container(
-        height:60,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
-        child: Row(
-          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Text(
-                widget.item[2],
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+      ),
+      child: Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            flex: 4,
+            child: Text(
+              widget.item[2],
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            new FloatingActionButton.extended(
-                heroTag: null,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => editLocation(item: widget.item)),
-                  );
-                },
-                label: Text('Edit'),
-                icon: const Icon(Icons.edit),
-                backgroundColor: Colors.red,
-              ),
-              new FloatingActionButton.extended(
-                heroTag: null,
-                onPressed: () {
-                  deleteLocation(widget.item[2]);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Setting(thislocation: thislocation)),
-                  );
-                },
-                label: Text(''),
-                icon: const Icon(Icons.delete),
-                backgroundColor: Colors.black,
-              ),
-          ],
-        ),
-      );
+          ),
+          new FloatingActionButton.extended(
+            heroTag: null,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => editLocation(item: widget.item)),
+              );
+            },
+            label: Text('Edit'),
+            icon: const Icon(Icons.edit),
+            backgroundColor: Colors.red,
+          ),
+          new FloatingActionButton.extended(
+            heroTag: null,
+            onPressed: () {
+              deleteLocation(widget.item[2]);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Setting(thislocation: thislocation)),
+              );
+            },
+            label: Text(''),
+            icon: const Icon(Icons.delete),
+            backgroundColor: Colors.black,
+          ),
+        ],
+      ),
+    );
   }
 }
