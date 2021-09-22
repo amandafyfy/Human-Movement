@@ -5,6 +5,7 @@
 import time
 import os
 from pathlib import Path
+
 from PyQt5.QtCore import QObject, pyqtSignal
 
 
@@ -31,10 +32,9 @@ class Integrator(QObject):
             self.integratedFile.emit(newPath)
         self.progressed.emit(0)  # Reset the progress
         self.finished.emit()
-        
 
         cmd = '''
-
+        mkdir output
         head -1 data/records1.csv > output/finalData.csv
         tail -n +2 -q data/records*.csv >> output/finalData.csv
         cat output/finalData.csv

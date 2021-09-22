@@ -80,6 +80,7 @@ class _UserInfoState extends State<UserInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
+                  key: Key('name'),
                   decoration: const InputDecoration(
                     hintText: 'Enter your Name',
                   ),
@@ -93,6 +94,7 @@ class _UserInfoState extends State<UserInfo> {
                     name = v;
                   }),
               TextFormField(
+                  key: Key('Garmin'),
                   decoration: const InputDecoration(
                     hintText: 'Garmin Account ID',
                   ),
@@ -106,6 +108,7 @@ class _UserInfoState extends State<UserInfo> {
                     garminId = v;
                   }),
               TextFormField(
+                  key: Key('Strava'),
                   decoration: const InputDecoration(
                     hintText: 'Strava Account ID',
                   ),
@@ -119,6 +122,7 @@ class _UserInfoState extends State<UserInfo> {
                     stravaId = v;
                   }),
               TextFormField(
+                  key: Key('Gender'),
                   decoration: const InputDecoration(
                     hintText: 'Gender',
                   ),
@@ -147,6 +151,7 @@ class _UserInfoState extends State<UserInfo> {
                   }
                 ), */
               TextFormField(
+                  key: Key('Vehicle'),
                   decoration: const InputDecoration(
                     hintText: 'Number of Vehicle Owned',
                   ),
@@ -160,6 +165,7 @@ class _UserInfoState extends State<UserInfo> {
                     numOfvehicle = v;
                   }),
               TextFormField(
+                  key: Key('type'),
                   decoration: const InputDecoration(
                     hintText: 'Vehicle Type',
                   ),
@@ -175,6 +181,7 @@ class _UserInfoState extends State<UserInfo> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
+                  key: Key('Submit'),
                   onPressed: () {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
