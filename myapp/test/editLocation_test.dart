@@ -29,11 +29,11 @@ void main(){
     expect(find.text('new location'), findsOneWidget);
     /** transport mode widget for marker */
     expect(find.text('transport'), findsOneWidget);
-    /** transport mode widget for marker */
+    /** activity  widget for marker */
     expect(find.text('act1'), findsOneWidget);
-    /** transport mode widget for marker */
+    /** enjoyment widget for marker */
     expect(find.text('enjoy1'), findsOneWidget);
-    /** transport mode widget for marker */
+    /** comment widget for marker */
     expect(find.text('comment'), findsOneWidget);
   });
 
@@ -41,7 +41,7 @@ void main(){
     await tester.pumpWidget(
         MaterialApp(home: editLocation(item: item)));
 
-    expect(find.byKey(ValueKey('comfirm')), findsOneWidget);
+    expect(find.byKey(ValueKey('confirm')), findsOneWidget);
   });
 
 

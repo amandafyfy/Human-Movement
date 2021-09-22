@@ -261,7 +261,7 @@ class _editLocationState extends State<editLocation> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints.expand(height: 55.0),
                   child: ElevatedButton(
-                    key: Key('comfirm'),
+                    key: Key('confirm'),
                     //style: style,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {

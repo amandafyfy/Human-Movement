@@ -14,11 +14,11 @@ void main(){
     expect(find.byKey(ValueKey('location_input')), findsOneWidget);
     /** transport mode widget for marker */
     expect(find.byKey(ValueKey('transport_input')), findsOneWidget);
-    /** transport mode widget for marker */
+    /** activity widget for marker */
     expect(find.byKey(ValueKey('Activity_one')), findsOneWidget);
-    /** transport mode widget for marker */
+    /** enjoyment widget for marker */
     expect(find.byKey(ValueKey('Enjoy_one')), findsOneWidget);
-    /** transport mode widget for marker */
+    /** comment widget for marker */
     expect(find.byKey(ValueKey('comment')), findsOneWidget);
   });
 
