@@ -5,7 +5,7 @@
 import time
 import os
 from pathlib import Path
-from gpx_converter import Converter
+
 from PyQt5.QtCore import QObject, pyqtSignal
 
 
