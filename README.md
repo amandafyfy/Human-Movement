@@ -1,5 +1,7 @@
 # CITS5206-Human-Movement
 
+Installation Guide for Data Integrator
+
 1) Download folder "Data Integrator with GUI"
 2) Unzip the Zip File if it is downloaded as Zip.
 3) Open "Terminal" or "Command Prompt"
@@ -13,4 +15,4 @@ If your "Data Integrator with GUI" folder is in Desktop, series of commands in T
 
 ![image](https://user-images.githubusercontent.com/56809330/133559238-6c7df3b5-892d-403f-8adf-d90c2b58d3e1.png)
 
-
+Refer "User Manual for Data Integrator" for functionalities
