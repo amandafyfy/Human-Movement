@@ -8,6 +8,7 @@ fi
 brew install sqlite
 brew install python3
 pip3 install gpx_converter
+pip3 install pytest.qt
 
 echo "python3 -m venv integrator/venv"
 
