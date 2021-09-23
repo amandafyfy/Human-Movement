@@ -9,3 +9,4 @@ Data Integrator with GUI/integrator/.DS_Store
 *.iml
 *.csv
 *.gpx
+*.pyc
