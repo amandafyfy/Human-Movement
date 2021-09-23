@@ -12,5 +12,16 @@ FROM records AS R
 LEFT JOIN visitedPlaces AS VP
     ON ROUND(R.latitude,4) = ROUND(VP.latitude,4)
         AND ROUND(R.longitude,4) = ROUND(VP.longitude,4);
+ 
+SELECT speed, 
+ CASE
+           WHEN speed >= 25 AND speed <= 28 THEN 'Bus'
+           when speed >= 13 AND speed <= 25 THEN 'Car'
+           when speed >= 1.5 AND speed <= 2.5 THEN 'Walk'
+           when speed >= 2.5 AND speed <= 4.1 THEN'Running'
+           ELSE  
+                'Train'
+           END AS 'mode_of_transport'
+FROM records;
 
 .output stdout
