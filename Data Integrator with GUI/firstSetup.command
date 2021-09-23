@@ -14,4 +14,5 @@ echo "python3 -m venv integrator/venv"
 
 chmod u+x CLI/runCLI.command
 chmod u+x runGUI.command
+chmod u+x runTest.command
 
