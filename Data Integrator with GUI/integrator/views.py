@@ -14,7 +14,7 @@ from .ui.window import Ui_Window
 FILTERS = ";;".join(
     (
         "CSV Files (*.csv)",
-        "JSON Files (*.jsn)",
+        "JSON Files (*.json)",
         "GPX Files (*.gpx)",
     )
 )
@@ -49,7 +49,7 @@ class Window(QWidget, Ui_Window):
         else:
             initDir = str(Path.home())
         files, filter = QFileDialog.getOpenFileNames(
-            self, "Choose Files to Integrate", initDir, filter=FILTERS
+            self, "Choose Files to Integrate", initDir
         )
         if len(files) > 0:
             srcDirName = str(Path(files[0]).parent)
