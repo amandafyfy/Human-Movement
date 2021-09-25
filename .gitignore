@@ -3,3 +3,6 @@
 *.xml
 *.iml
 
+*.pyc
+*.gpx
+*.csv
