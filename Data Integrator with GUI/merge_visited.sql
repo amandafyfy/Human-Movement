@@ -12,7 +12,7 @@ R.*, CASE
 	WHEN speed >= 1.5 AND speed <= 2.5 THEN 'Walking'
 	WHEN speed >= 2.5 AND speed <= 4.1 THEN'Running'
 	WHEN speed >= 40 AND speed <= 98 THEN 'Train'
-	ELSE 'Staying at home'
+	ELSE 'Stationary'
 END AS 'mode_of_transport', VP.locationName AS vis_name, 
 VP.Activity1 AS vis_activity1, VP.Activity2 AS vis_activity2, VP.Activity3 AS vis_activity3,VP.latitude AS vis_lat, VP.longitude AS vis_long
 FROM records AS R
