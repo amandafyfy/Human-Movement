@@ -287,7 +287,7 @@ class _MyHomePageState extends State<MyHomePage> {
     UserData = [];
   }
 
-  void generateCsvFile() async {
+  Future<void> generateCsvFile() async {
     // generate file name
     String file_name = "${_garminId}${_num}.csv";
     List<List<dynamic>> rows = [];
@@ -302,15 +302,13 @@ class _MyHomePageState extends State<MyHomePage> {
       add_context(rows);
       csv = const ListToCsvConverter().convert(rows);
       await file.writeAsString(csv, mode: FileMode.append);
-      UserData.clear();
+      //UserData.clear();
     } else {
-      // create csv file
-      await file.create();
       add_head(rows);
       add_context(rows);
       csv = const ListToCsvConverter().convert(rows);
       await file.writeAsString(csv);
-      UserData.clear();
+      //UserData.clear();
     }
 
     final input = new File(path).openRead();
@@ -359,7 +357,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     locationSubscription = locationStream?.listen(onData);
     await LocationManager().start();
-    startAutoUpdate();
+    //startAutoUpdate();
     setState(() {
       _status = LocationStatus.RUNNING;
     });
@@ -375,7 +373,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // @Cathyling
   // user upload the csv file
-  void uploadFile() async {
+  Future<void> uploadFile() async {
     final directory = await getApplicationDocumentsDirectory();
     String file_name = "${_garminId}${_num}.csv";
     final path = "${directory.path}/${file_name}";
@@ -384,15 +382,15 @@ class _MyHomePageState extends State<MyHomePage> {
     final destination = '${_garminId}/$file_name';
     print(path);
     print(destination);
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child("$destination");
-    //final UploadTask uploadTask = storageReference.putFile(file);
-    // upload file to firebase storage
-    storageReference.putFile(file);
-    // delete file in the memory
-    file.delete();
-    // incrementing file number
-    _setFileNum(_num);
+      Reference storageReference =
+              FirebaseStorage.instance.ref().child("$destination");
+      final UploadTask uploadTask = storageReference.putFile(file);
+      // upload file to firebase storage
+      await uploadTask;
+      // delete file in the memory
+      await file.delete();
+      // incrementing file number
+      _setFileNum(_num);
   }
 
   // @Cathyling
@@ -400,8 +398,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void startAutoUpdate() {
     final cron = new Cron();
     cron.schedule(new Schedule.parse('0 10 * * *'), () async {
-      generateCsvFile();
-      uploadFile();
+      //await generateCsvFile();
+      await uploadFile();
     });
   }
   // write UserData into csv every hour at minute 0
@@ -440,6 +438,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.not_started_outlined, color: Colors.black, size: 60),
         onPressed: () {
           start(); 
+          generateCsvFile();
           startAutoUpdate();
           writeCSV();
         },
@@ -651,8 +650,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Then close the drawer
                 generateCsvFile();
                 uploadFile();
-
-                Navigator.popUntil(context, ModalRoute.withName('/'));
+                //Navigator.popUntil(context, ModalRoute.withName('/'));
               },
             ),
             //ListTile(
@@ -674,15 +672,6 @@ class _MyHomePageState extends State<MyHomePage> {
             //generateCsvFile();
             //},
             //),
-            ListTile(
-              title: const Text('Start Auto Upload'),
-              onTap: () {
-                // Update the state of the app
-                // Then close the drawer
-                startAutoUpdate();
-                writeCSV();
-              },
-            ),
           ],
         ),
       ),
