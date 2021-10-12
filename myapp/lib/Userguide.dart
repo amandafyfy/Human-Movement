@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget firstStep() {
   return Text(
-    "1: Create account and fill the information required. Click linke below",
+    "1: Create account and fill the information required. Click link below",
     style: TextStyle(
         fontSize: 20,
         fontStyle: FontStyle.italic,

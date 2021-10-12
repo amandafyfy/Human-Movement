@@ -473,7 +473,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.of(context).pop();
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = TextButton(
       child: Text("Continue"),
       onPressed:  () {
         generateCsvFile();
@@ -482,8 +482,8 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
+    AlertDialog alert = TextButton(
+      title: Text(""),
       content: Text("Would you like to continue uploading file?"),
       actions: [
         cancelButton,
