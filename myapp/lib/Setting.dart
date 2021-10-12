@@ -43,7 +43,7 @@ class _SettingState extends State<Setting> {
   void _readfile() async {
     markers = new Set();
     final directory = await getApplicationDocumentsDirectory();
-    final path = directory.path + "/locations.csv";
+    final path = directory.path + "/visited_places.csv";
     print("path:" + path);
 
     final input = new File(path).openRead();
@@ -82,11 +82,11 @@ class _SettingState extends State<Setting> {
 
   void uploadFile() async {
     final directory = await getApplicationDocumentsDirectory();
-    final path = directory.path + "/locations.csv";
+    final path = directory.path + "/visited_places.csv";
 
     File file = File(path);
     final fileName = basename(file.path);
-    final destination = '$_garminId/location.csv';
+    final destination = '$_garminId/visited_places.csv';
     print(path);
     Reference storageReference =
         FirebaseStorage.instance.ref().child("$destination");
