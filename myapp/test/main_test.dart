@@ -50,7 +50,7 @@ void main(){
   /** add context test function*/
   test('add rows to csv ', () {
     List<List<dynamic>> rows = [];
-    DataPoint row = DataPoint(12000, 12.5, 78.5, 2.0);
+    DataPoint row = DataPoint("parker", 12000, 12.5, 78.5, 2.0);
     List<DataPoint> UserData = [];
     UserData.add(row);
     new MyHomePage(title: 'Flutter Demo Home Page').createState().add_context(rows);
