@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class DataPoint {
+  String? userId;
   double? date;
   double? longitude;
   double? latitude;
   double? speed;
 
   //constructor
-  DataPoint(double date, double longitude, double latitude, double speed) {
+  DataPoint(String userId, double date, double longitude, double latitude, double speed) {
+    this.userId = userId;
     this.date = date;
     this.longitude = longitude;
     this.latitude = latitude;

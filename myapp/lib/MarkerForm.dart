@@ -69,7 +69,7 @@ class _MarkerFormState extends State<MarkerForm> {
 
     String csv = "";
     final directory = await getApplicationDocumentsDirectory();
-    final path = directory.path+"/locations.csv";
+    final path = directory.path+"/visited_places.csv";
     print("path:" + path);
 
     File file = File(path);

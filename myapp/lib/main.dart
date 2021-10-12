@@ -178,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<bool> setLocationState() async {
-    String location = "locations.csv";
+    String location = "visited_places.csv";
 
     final directory = await getApplicationDocumentsDirectory();
     final locationPath = "${directory.path}/${location}";
@@ -263,6 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // csv file header
   void add_head(List<List<dynamic>> rows) {
     List<dynamic> row = [];
+    row.add("userId");
     row.add("unixTime");
     row.add("latitude");
     row.add("longitude");
@@ -277,13 +278,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     for (int i = 0; i < UserData.length; i++) {
       List<dynamic> row = [];
+      row.add(UserData[i].userId);
       row.add(UserData[i].date);
       row.add(UserData[i].latitude);
       row.add(UserData[i].longitude);
       row.add(UserData[i].speed);
       rows.add(row);
     }
-
     UserData = [];
   }
 
@@ -324,7 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //String time = DateTime.fromMillisecondsSinceEpoch(dto.time.toInt()).toString();
     double time = dto.time;
     DataPoint segment =
-        new DataPoint(time, dto.longitude, dto.latitude, dto.speed);
+        new DataPoint(_garminId, time, dto.longitude, dto.latitude, dto.speed);
     UserData.add(segment);
   }
 
@@ -481,7 +482,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget deleteButton() {
     return ElevatedButton(
-      child: Text("Delete Data collection"),
+      child: Text("Delete User Data collection"),
       onPressed: () {
         _deleteFile();
         Navigator.push(
@@ -494,27 +495,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _deleteFile() async {
     final directory = await getApplicationDocumentsDirectory();
-    final userpath = directory.path + "/user.csv";
-    final locationpath = directory.path + "/locations.csv";
-    final profile = directory.path + "/${_garminId}userProfile.json";
+    final userpath = directory.path + "${_garminId}_records${_num}.csv";
+    //final locationpath = directory.path + "/visited_places.csv";
+    //final profile = directory.path + "/${_garminId}userProfile.json";
 
     File userfile = File(userpath);
-    File locationfile = File(locationpath);
-    File profilefile = File(profile);
+    //File locationfile = File(locationpath);
+    //File profilefile = File(profile);
 
     print(userfile);
     if (await userfile.exists()) {
       await userfile.delete();
       print("user delete done");
     }
-    if (await locationfile.exists()) {
+    /*if (await locationfile.exists()) {
       await locationfile.delete();
       print("location delete done");
     }
     if (await profilefile.exists()) {
       await profilefile.delete();
       print("location delete done");
-    }
+    }*/
   }
 
   @override
