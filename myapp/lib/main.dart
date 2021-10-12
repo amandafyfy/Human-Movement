@@ -466,7 +466,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed:  () {
 
@@ -482,7 +482,7 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
     // set up the AlertDialog
-    AlertDialog alert = TextButton(
+    AlertDialog alert = AlertDialog(
       title: Text(""),
       content: Text("Would you like to continue uploading file?"),
       actions: [
