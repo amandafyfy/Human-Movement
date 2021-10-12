@@ -289,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> generateCsvFile() async {
     // generate file name
-    String file_name = "${_garminId}${_num}.csv";
+    String file_name = "${_garminId}_records${_num}.csv";
     List<List<dynamic>> rows = [];
 
     String csv = "";
@@ -375,7 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // user upload the csv file
   Future<void> uploadFile() async {
     final directory = await getApplicationDocumentsDirectory();
-    String file_name = "${_garminId}${_num}.csv";
+    String file_name = "${_garminId}_records${_num}.csv";
     final path = "${directory.path}/${file_name}";
     File file = File(path);
     // file path on firebase storage
@@ -439,7 +439,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           start(); 
           generateCsvFile();
-          startAutoUpdate();
+          //startAutoUpdate();
           writeCSV();
         },
         style: ElevatedButton.styleFrom(
