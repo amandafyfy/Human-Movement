@@ -242,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget secondLink() {
     return InkWell(
       child: new Text(
-        'Open Map Setting',
+        'Set Visited Places',
         style: TextStyle(
           fontSize: 20,
           fontStyle: FontStyle.italic,
@@ -464,6 +464,41 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed:  () {
+        generateCsvFile();
+        uploadFile();
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      content: Text("Would you like to continue uploading file?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   /**Widget lastLoc() {
     return Text(
         lastLocation != null
@@ -480,22 +515,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget deleteButton() {
+  Widget UploadButton() {
     return ElevatedButton(
-      child: Text("Delete User Data collection"),
+      child: Text("Click to Upload User Data"),
       onPressed: () {
-        _deleteFile();
-        Navigator.push(
-          this.context,
-          MaterialPageRoute(builder: (context) => MyHomePage(title: "Home")),
-        );
+        showAlertDialog(this.context);
       },
     );
   }
 
   void _deleteFile() async {
     final directory = await getApplicationDocumentsDirectory();
-    final userpath = directory.path + "${_garminId}_records${_num}.csv";
+    final userpath = directory.path + "/${_garminId}_records${_num}.csv";
     //final locationpath = directory.path + "/visited_places.csv";
     //final profile = directory.path + "/${_garminId}userProfile.json";
 
@@ -557,7 +588,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(height: 30.0),
                 dtoWidget(lastLocation),
                 //getButton(),
-                deleteButton()
+                SizedBox(height: 50.0),
+                UploadButton(),
               ],
               if (flag == false) ...[
                 if (!firstState) ...[
@@ -604,8 +636,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
             ),*/
-            /*
-            ListTile(
+
+            /**ListTile(
               title: const Text('Profile'),
               onTap: () {
                 // Update the state of the app
@@ -619,7 +651,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),*/
             ListTile(
-              title: const Text('UserProfile'),
+              title: const Text('User Profile'),
               onTap: () {
                 // Update the state of the app
                 // Then close the drawer
@@ -644,35 +676,15 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
-              title: const Text('Upload Data'),
+              title: const Text('Delete Data'),
               onTap: () {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
-                generateCsvFile();
-                uploadFile();
+                _deleteFile();
                 //Navigator.popUntil(context, ModalRoute.withName('/'));
               },
             ),
-            //ListTile(
-            //title: const Text('Dialog'),
-            //onTap: () {
-            // Update the state of the app
-            // Then close the drawer
-            //Navigator.push(
-            //context,
-            //MaterialPageRoute(builder: (context) => Dialog()),
-            //);
-            //},
-            //),
-            //ListTile(
-            //title: const Text('display file'),
-            //onTap: () {
-            // Update the state of the app
-            // Then close the drawer
-            //generateCsvFile();
-            //},
-            //),
           ],
         ),
       ),
