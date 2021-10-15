@@ -4,9 +4,8 @@
 
 .output output/finalData.csv
 
-UPDATE records
-SET unixTime = datetime(unixTime/1000, 'unixepoch', 'localtime');
 
-SELECT * FROM records;
+SELECT  *, datetime(unixTime/1000, 'unixepoch', 'localtime') AS date
+FROM records;
 
 .output stdout
