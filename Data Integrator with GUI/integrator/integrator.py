@@ -37,12 +37,13 @@ class Integrator(QObject):
         cmd = '''
         mkdir output
         mkdir data/Used\ Data/
-        head -1 data/records1.csv > output/finalData.csv
-        tail -n +2 -q data/records*.csv >> output/finalData.csv
+        head -1 data/*records1.csv > output/finalData.csv
+        tail -n +2 -q data/*records*.csv >> output/finalData.csv
+        sqlite3 < convertTime.sql
+
         FILE_loc=data/locations.csv
         FILE_garmin=data/garmin_gpx.gpx
         FILE_vis=data/visited_places.csv
-        
         if [[ -f "$FILE_garmin" ]]; then
             echo "Garmin File Exists -> Creating Garming CSV"
             gpx_converter --function "gpx_to_csv" --input_file "$FILE_garmin" --output_file "output/output_garmin.csv"
