@@ -1,7 +1,7 @@
 .mode csv
 .headers on
 .import output/finalData.csv records
-.import data/visited_places.csv visitedPlaces
+.import data/visited_places_formatted.csv visitedPlaces
 
 .output output/finalData.csv
 

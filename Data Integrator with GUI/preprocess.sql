@@ -4,8 +4,7 @@
 
 .output output/finalData.csv
 
-
-SELECT  *, datetime(unixTime/1000, 'unixepoch', 'localtime') AS date,
+SELECT userId, unixTime, datetime(unixTime/1000, 'unixepoch', 'localtime') AS date, latitude, longitude, speed,
 CASE
 	WHEN CAST(speed as DECIMAL(9,2)) = 0 THEN 'Stationary'
 	WHEN CAST(speed as DECIMAL(9,2)) > 0 AND CAST(speed as DECIMAL(9,2)) <= 2.7 THEN 'Walking'

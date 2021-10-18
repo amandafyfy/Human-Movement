@@ -9,9 +9,9 @@ UPDATE garmin
 SET time = STRFTIME("%Y-%m-%d, %H:%M", time);
 
 
-SELECT loc.*, G.latitude AS garmin_lat, G.longitude AS garmin_long, G.altitude AS garmin_alt, loc.latitude - G.latitude AS lat_dif, loc.longitude - G.longitude AS lon_dif
-FROM record_visited_loc AS loc
+SELECT R.*, G.latitude AS garmin_lat, G.longitude AS garmin_long, G.altitude AS garmin_alt, R.latitude - G.latitude AS lat_dif, R.longitude - G.longitude AS lon_dif
+FROM record_visited_loc AS R
 LEFT JOIN garmin AS G
-    ON G.time = STRFTIME("%Y-%m-%d, %H:%M", loc.date) ;
+    ON G.time = STRFTIME("%Y-%m-%d, %H:%M", R.date) ;
 
 .output stdout

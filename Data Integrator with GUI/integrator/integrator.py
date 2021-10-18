@@ -38,7 +38,7 @@ class Integrator(QObject):
         mkdir output
         mkdir data/Used\ Data/
 
-        for i in data/*.csv
+        for i in data/*records*.csv
         do 
             echo "\n" >> $i
         done
@@ -47,14 +47,13 @@ class Integrator(QObject):
         tail -n +3 -q data/*records*.csv >> output/finalData.csv
         sqlite3 < preprocess.sql
 
-        FILE_loc=data/locations.csv
+        FILE_poi=data/point_of_interest.csv
         FILE_garmin=data/garmin_gpx.gpx
         FILE_vis=data/visited_places.csv
 
         if [[ -f "$FILE_vis" ]]; then
-          head -1 data/visited_places.csv > data/visited_places2.csv
-          tail -n +3 -q data/visited_places.csv >> data/visited_places2.csv
-          mv data/visited_places2.csv data/visited_places.csv
+          head -1 data/visited_places.csv > data/visited_places_formatted.csv
+          tail -n +3 -q data/visited_places.csv >> data/visited_places_formatted.csv
         fi
 
 
@@ -63,47 +62,53 @@ class Integrator(QObject):
             gpx_converter --function "gpx_to_csv" --input_file "$FILE_garmin" --output_file "output/output_garmin.csv"
         fi
 
-        if [[ -f "$FILE_vis" && -f "$FILE_loc" && -f "$FILE_garmin" ]]; then
+        if [[ -f "$FILE_vis" && -f "$FILE_poi" && -f "$FILE_garmin" ]]; then
             echo "All Files Provided -> Merging"
             sqlite3 < merge_visited.sql
-            sqlite3 < merge_locations.sql
+            sqlite3 < merge_POI.sql
             sqlite3 < merge_garmin.sql
-            mv data/*.gpx data/Used\ Data/
-        elif [[ -f "$FILE_vis" && -f "$FILE_loc" ]]; then
+        elif [[ -f "$FILE_vis" && -f "$FILE_poi" ]]; then
             echo "Garmin File Not Provided -> Merging"
             sqlite3 < merge_visited.sql
-            sqlite3 < merge_locations.sql
+            sqlite3 < merge_POI.sql
         elif [[ -f "$FILE_vis" && -f "$FILE_garmin" ]]; then
             echo "Location File Not Provided -> Merging"
             sqlite3 < merge_visited.sql
             sqlite3 < merge_garmin.sql
-            mv data/*.gpx data/Used\ Data/
-        elif [[ -f "$FILE_loc" && -f "$FILE_garmin" ]]; then
+        elif [[ -f "$FILE_poi" && -f "$FILE_garmin" ]]; then
             echo "Visited File Not Provided  -> Merging"
-            sqlite3 < merge_locations.sql
+            sqlite3 < merge_POI.sql
             sqlite3 < merge_garmin.sql
-            mv data/*.gpx data/Used\ Data/
         elif [ -f "$FILE_vis" ]; then
             echo "VISITED FILE ONLY -> Merging"
             sqlite3 < merge_visited.sql
-        elif [ -f "$FILE_loc" ]; then
+        elif [ -f "$FILE_poi" ]; then
             echo "LOCATION FILE ONLY -> Merging"
-            sqlite3 < merge_locations.sql
+            sqlite3 < merge_POI.sql
         elif [ -f "$FILE_garmin" ]; then
             echo "GARMIN FILE ONLY -> Merging"
             sqlite3 < merge_garmin.sql
-            mv data/*.gpx data/Used\ Data/
         fi
 
         echo "Data Integration Completed"
+
+        cat output/finalData.csv >> output/allBatches.csv
+        echo "END OF BATCH \n" >> output/allBatches.csv
+
+        userID=$(sed -n '3p' data/*records1.csv | cut -d ',' -f1)
+        echo SET USER ID
+        echo $userID
+
+        mkdir output/${userID}/
+        mv output/finalData.csv output/${userID}/${userID}$(date +%Y%m%d%H%M%S).csv
+        cp data/*.json output/${userID}/profile_${userID}$(date +%Y%m%d%H%M%S).json
         echo "Output files are stored in output folder"
 
-	touch allBatches.csv
-	cat output/finalData.csv >> output/allBatches.csv
-	echo "END OF BATCH \n" >> output/allBatches.csv
-
-        mv data/*.csv data/Used\ Data/
-        mv data/*.json data/Used\ Data/
+        mkdir data/Used\ Data/${userID}/
+        mkdir data/Used\ Data/${userID}/$(date +%Y%m%d%H%M%S)/
+        mv data/*.csv data/Used\ Data/${userID}/$(date +%Y%m%d%H%M%S)/
+        mv data/*.json data/Used\ Data/${userID}/$(date +%Y%m%d%H%M%S)/
+        mv data/*.gpx data/Used\ Data/${userID}/$(date +%Y%m%d%H%M%S)/
 
         echo "Used files are moved to Data/Used Data"
 
