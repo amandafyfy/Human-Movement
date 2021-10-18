@@ -17,6 +17,7 @@ CASE
 	WHEN CAST(speed as DECIMAL(9,2)) > 20.0 AND CAST(speed as DECIMAL(9,2)) <= 36.0 THEN 'Train'
 	ELSE 'UNKNOWN'
 END AS 'mode_of_transport'
-FROM records;
+FROM records
+ORDER BY userId, unixTime;
 
 .output stdout

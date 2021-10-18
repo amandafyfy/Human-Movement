@@ -45,7 +45,7 @@ class Integrator(QObject):
 
         head -1 data/*records1.csv > output/finalData.csv
         tail -n +3 -q data/*records*.csv >> output/finalData.csv
-        sqlite3 < convertTime.sql
+        sqlite3 < preprocess.sql
 
         FILE_loc=data/locations.csv
         FILE_garmin=data/garmin_gpx.gpx
@@ -97,6 +97,10 @@ class Integrator(QObject):
 
         echo "Data Integration Completed"
         echo "Output files are stored in output folder"
+
+	touch allBatches.csv
+	cat output/finalData.csv >> output/allBatches.csv
+	echo "END OF BATCH \n" >> output/allBatches.csv
 
         mv data/*.csv data/Used\ Data/
         mv data/*.json data/Used\ Data/
