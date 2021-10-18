@@ -43,7 +43,7 @@ class Integrator(QObject):
             echo "\n" >> $i
         done
 
-        head -1 data/*records1.csv > output/finalData.csv
+        head -1 data/*records*.csv | sed -n '2p' > output/finalData.csv
         tail -n +3 -q data/*records*.csv >> output/finalData.csv
         sqlite3 < preprocess.sql
 
@@ -95,7 +95,7 @@ class Integrator(QObject):
         cat output/finalData.csv >> output/allBatches.csv
         echo "END OF BATCH \n" >> output/allBatches.csv
 
-        userID=$(sed -n '3p' data/*records1.csv | cut -d ',' -f1)
+        userID=$(head -3 data/*records*.csv | sed -n '4p' | cut -d ',' -f1)
         echo SET USER ID
         echo $userID
 
