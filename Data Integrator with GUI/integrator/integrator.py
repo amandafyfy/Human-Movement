@@ -90,6 +90,7 @@ class Integrator(QObject):
             sqlite3 < merge_garmin.sql
         fi
 
+        rm data/visited_places_formatted.csv
         echo "Data Integration Completed"
 
         cat output/finalData.csv >> output/allBatches.csv
