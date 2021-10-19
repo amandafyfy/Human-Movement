@@ -101,15 +101,17 @@ class Integrator(QObject):
         echo $userID
 
         mkdir output/${userID}/
-        mv output/finalData.csv output/${userID}/${userID}$(date +%Y%m%d%H%M%S).csv
-        cp data/*.json output/${userID}/profile_${userID}$(date +%Y%m%d%H%M%S).json
+        mkdir output/${userID}/${userID}_$(date +%Y%m%d%H%M%S)
+        mv output/finalData.csv output/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/${userID}_$(date +%Y%m%d%H%M%S).csv
+        cp data/*.json output/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/profile_${userID}_$(date +%Y%m%d%H%M%S).json
+        mv output/output_garmin.csv output/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/garmin_${userID}_$(date +%Y%m%d%H%M%S).csv
         echo "Output files are stored in output folder"
 
         mkdir data/Used\ Data/${userID}/
-        mkdir data/Used\ Data/${userID}/$(date +%Y%m%d%H%M%S)/
-        mv data/*.csv data/Used\ Data/${userID}/$(date +%Y%m%d%H%M%S)/
-        mv data/*.json data/Used\ Data/${userID}/$(date +%Y%m%d%H%M%S)/
-        mv data/*.gpx data/Used\ Data/${userID}/$(date +%Y%m%d%H%M%S)/
+        mkdir data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.csv data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.json data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.gpx data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
 
         echo "Used files are moved to Data/Used Data"
 
