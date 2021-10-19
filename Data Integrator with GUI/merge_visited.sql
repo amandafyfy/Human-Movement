@@ -1,20 +1,16 @@
 .mode csv
 .headers on
 .import output/finalData.csv records
-.import data/visited_places.csv visitedPlaces
+.import data/visited_places_formatted.csv visitedPlaces
 
 .output output/finalData.csv
 
-SELECT 
-R.*, CASE
-	WHEN speed >= 25 AND speed <= 28 THEN 'Bus'
-	WHEN speed >= 13 AND speed <= 25 THEN 'Car'
-	WHEN speed >= 1.5 AND speed <= 2.5 THEN 'Walking'
-	WHEN speed >= 2.5 AND speed <= 4.1 THEN'Running'
-	WHEN speed >= 40 AND speed <= 98 THEN 'Train'
-	ELSE 'Stationary'
-END AS 'mode_of_transport', VP.locationName AS vis_name, 
-VP.Activity1 AS vis_activity1, VP.Activity2 AS vis_activity2, VP.Activity3 AS vis_activity3,VP.latitude AS vis_lat, VP.longitude AS vis_long
+SELECT R.*, VP.latitude AS vis_lat, VP.longitude AS vis_long,
+VP.locationName AS vis_locName, VP.transport AS vis_transport,
+VP."Activity 1" AS vis_act1, VP.Enjoyment1 AS vis_act_enjoyment1,
+VP."Activity 2" AS vis_act2, VP.Enjoyment2 AS vis_act_enjoyment2,
+VP."Activity 3" AS vis_act3, VP.Enjoyment3 AS vis_act_enjoyment3,
+VP.Comment AS vis_comment
 FROM records AS R
 LEFT JOIN visitedPlaces AS VP
     ON ROUND(R.latitude,4) = ROUND(VP.latitude,4)
