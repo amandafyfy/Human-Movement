@@ -11,9 +11,14 @@ for f in multi-data/*/ ; do
 	echo ${f} 
 	mv ${f}/* runCLI/data 
 	./runCLI/singleCLI.command
-	sleep 2
+	sleep 1
 	echo " "
 done
+
+rm -rf runCLI/data
+
+mv runCLI/output .
+mv runCLI/used\ data/ .
 
 echo " "
 echo " "
