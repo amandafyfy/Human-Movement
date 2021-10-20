@@ -115,5 +115,15 @@ class Integrator(QObject):
 
         echo "Used files are moved to Data/Used Data"
 
+	echo "#################################"
+	echo "#################################"
+	echo "#################################"
+	echo "## DATA INTEGRATION COMPLETED. ##"
+	echo "#################################"
+	echo "########## THANK YOU! ###########"
+	echo "#################################"
+	echo "#################################"
+	echo "#################################"
+
         '''
         os.system(cmd)
