@@ -469,8 +469,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed:  () {
-
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
     Widget continueButton = TextButton(
@@ -478,7 +477,7 @@ class _MyHomePageState extends State<MyHomePage> {
       onPressed:  () {
         generateCsvFile();
         uploadFile();
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
     // set up the AlertDialog
@@ -505,13 +504,13 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Text("Cancel"),
       onPressed:  () {
         _deleteFile();
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
     Widget continueButton = TextButton(
       child: Text("Continue"),
       onPressed:  () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
     // set up the AlertDialog
