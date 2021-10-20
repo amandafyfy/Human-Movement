@@ -1,40 +1,6 @@
-# -*- coding: utf-8 -*-
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-"""This module provides the Integrator class to merge multiple files."""
-
-import time
-import os
-from pathlib import Path
-
-from PyQt5.QtCore import QObject, pyqtSignal
-
-
-class Integrator(QObject):
-    # Define custom signals
-    progressed = pyqtSignal(int)
-    integratedFile = pyqtSignal(Path)
-    finished = pyqtSignal()
-
-    def __init__(self, files):
-        super().__init__()
-        self._files = files
-
-    def integrateFiles(self):
-        os.system('mkdir data')
-        cwd = os.getcwd()
-        for fileNumber, file in enumerate(self._files, 1):
-            oldName = file.name
-            newPath = file.parent.joinpath(
-                f"{cwd}/data/{str(oldName)}"
-            )
-            file.rename(newPath)
-            time.sleep(0.1)  # Comment this line to integrate move faster.
-            self.progressed.emit(fileNumber)
-            self.integratedFile.emit(newPath)
-        self.progressed.emit(0)  # Reset the progress
-        self.finished.emit()
-
-        cmd = '''
         mkdir output
         mkdir data/Used\ Data/
 
@@ -115,15 +81,12 @@ class Integrator(QObject):
 
         echo "Used files are moved to Data/Used Data"
 
-	echo "#################################"
-	echo "#################################"
-	echo "#################################"
-	echo "## DATA INTEGRATION COMPLETED. ##"
-	echo "#################################"
-	echo "########## THANK YOU! ###########"
-	echo "#################################"
-	echo "#################################"
-	echo "#################################"
-
-        '''
-        os.system(cmd)
+echo "#################################"
+echo "#################################"
+echo "#################################"
+echo "## DATA INTEGRATION COMPLETED. ##"
+echo "#################################"
+echo "########## THANK YOU! ###########"
+echo "#################################"
+echo "#################################"
+echo "#################################"
