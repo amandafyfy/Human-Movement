@@ -35,8 +35,8 @@ class Integrator(QObject):
         self.finished.emit()
 
         cmd = '''
+
         mkdir output
-        mkdir data/Used\ Data/
 
         for i in data/*records*.csv
         do 
@@ -106,14 +106,15 @@ class Integrator(QObject):
         cp data/*.json output/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/profile_${userID}_$(date +%Y%m%d%H%M%S).json
         mv output/output_garmin.csv output/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/garmin_${userID}_$(date +%Y%m%d%H%M%S).csv
         echo "Output files are stored in output folder"
+	
+        mkdir used\ data/
+        mkdir used\ data/${userID}/
+        mkdir used\ data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.csv used\ data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.json used\ data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.gpx used\ data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
 
-        mkdir data/Used\ Data/${userID}/
-        mkdir data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
-        mv data/*.csv data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
-        mv data/*.json data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
-        mv data/*.gpx data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
-
-        echo "Used files are moved to Data/Used Data"
+        echo "Used files are moved to "used data" folder"
 
 	echo "#################################"
 	echo "#################################"

@@ -1,8 +1,8 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
+	mkdir data
         mkdir output
-        mkdir data/Used\ Data/
 
         for i in data/*records*.csv
         do 
@@ -73,13 +73,14 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
         mv output/output_garmin.csv output/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/garmin_${userID}_$(date +%Y%m%d%H%M%S).csv
         echo "Output files are stored in output folder"
 
-        mkdir data/Used\ Data/${userID}/
-        mkdir data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
-        mv data/*.csv data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
-        mv data/*.json data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
-        mv data/*.gpx data/Used\ Data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mkdir used\ data/
+        mkdir used\ data/${userID}/
+        mkdir used\ data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.csv used\ data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.json used\ data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
+        mv data/*.gpx used\ data/${userID}/${userID}_$(date +%Y%m%d%H%M%S)/
 
-        echo "Used files are moved to Data/Used Data"
+        echo "Used files are moved to "used data" folder"
 
 echo "#################################"
 echo "#################################"
