@@ -499,6 +499,39 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  deleteAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        _deleteFile();
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continue"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(""),
+      content: Text("Would you like to continue delete data?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   /**Widget lastLoc() {
     return Text(
         lastLocation != null
@@ -681,7 +714,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
-                _deleteFile();
+                deleteAlertDialog(this.context);
                 //Navigator.popUntil(context, ModalRoute.withName('/'));
               },
             ),
