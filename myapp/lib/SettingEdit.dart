@@ -96,6 +96,7 @@ class _PostState extends State<Post> {
     thislocation.latitude = widget.item[1];
 
     //String name = widget.item[2];
+
     return Container(
       height: 60,
       decoration: BoxDecoration(
@@ -116,7 +117,7 @@ class _PostState extends State<Post> {
             heroTag: null,
             onPressed: () {
               Navigator.push(
-                this.context,
+                context,
                 MaterialPageRoute(
                     builder: (context) => editLocation(item: widget.item)),
               );
@@ -131,7 +132,7 @@ class _PostState extends State<Post> {
             onPressed: () async{
               await deleteLocation(widget.item[2]);
               Navigator.push(
-                this.context,
+                context,
                 MaterialPageRoute(
                     builder: (context) => Setting(thislocation: thislocation)),
               );

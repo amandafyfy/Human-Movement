@@ -469,15 +469,23 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed:  () {
-        Navigator.of(context, rootNavigator: true).pop();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => new MyHomePage(title: "Home")),
+        );
       },
     );
     Widget continueButton = TextButton(
       child: Text("Continue"),
-      onPressed:  () {
+      onPressed: () async{
         generateCsvFile();
-        uploadFile();
-        Navigator.of(context, rootNavigator: true).pop();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => new MyHomePage(title: "Home")),
+        );
+        await uploadFile();
       },
     );
     // set up the AlertDialog
@@ -504,13 +512,13 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Text("Cancel"),
       onPressed:  () {
         _deleteFile();
-        Navigator.of(context, rootNavigator: true).pop();
+        Navigator.pop(context);
       },
     );
     Widget continueButton = TextButton(
       child: Text("Continue"),
       onPressed:  () {
-        Navigator.of(context, rootNavigator: true).pop();
+        Navigator.pop(context);
       },
     );
     // set up the AlertDialog

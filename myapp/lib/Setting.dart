@@ -80,7 +80,7 @@ class _SettingState extends State<Setting> {
     }
   }
 
-  void uploadFile() async {
+  Future<void> uploadFile() async {
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path + "/visited_places.csv";
 
@@ -144,7 +144,7 @@ class _SettingState extends State<Setting> {
           onLongPress: (latlang) {
             //_addMarkerLongPressed(latlang); //we will call this function when pressed on the map
             Navigator.push(
-                this.context,
+                context,
                 MaterialPageRoute(
                     builder: (context) => MarkerForm(latlang: latlang)));
           },
@@ -158,11 +158,12 @@ class _SettingState extends State<Setting> {
                 key: Key('finish'),
                 heroTag: null,
                 onPressed: () async{
-                  uploadFile();
+                  await uploadFile();
+                  Navigator.pushReplacementNamed(context, '/');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyHomePage(title: "Home")),
+                        builder: (context) => new MyHomePage(title: "Home")),
                   );
                 },
                 label: Text('Finish setting'),
@@ -177,7 +178,7 @@ class _SettingState extends State<Setting> {
                 heroTag: null,
                 onPressed: () {
                   Navigator.push(
-                    this.context,
+                    context,
                     MaterialPageRoute(
                         builder: (context) => SettingEdit(field: field)),
                   );

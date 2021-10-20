@@ -301,7 +301,7 @@ class _editLocationState extends State<editLocation> {
                       if (_formKey.currentState!.validate()) {
                         await editvalue(widget.item[2], widget.item[0], widget.item[1], _locationnameController.text, _transmodeController.text, _Activity1Controller.text, _enjoy1Controller.text, _Activity2Controller.text, _enjoy2Controller.text, _Activity3Controller.text, _enjoy3Controller.text, _CommentController.text);
                         Navigator.push(
-                          this.context,
+                          context,
                           MaterialPageRoute(builder: (context) => Setting(thislocation: thislocation)),
                         );
                       }
