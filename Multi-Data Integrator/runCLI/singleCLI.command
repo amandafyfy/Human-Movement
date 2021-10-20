@@ -60,7 +60,7 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
         echo "Data Integration Completed"
 
         cat output/finalData.csv >> output/allBatches.csv
-        echo "END OF BATCH \n" >> output/allBatches.csv
+        printf "END OF BATCH \n" >> output/allBatches.csv
 
         userID=$(head -3 data/*records*.csv | sed -n '4p' | cut -d ',' -f1)
         echo SET USER ID
