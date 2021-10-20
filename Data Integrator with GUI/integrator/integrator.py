@@ -40,7 +40,7 @@ class Integrator(QObject):
 
         for i in data/*records*.csv
         do 
-            echo "\n" >> $i
+            printf "\n" >> $i
         done
 
         head -1 data/*records*.csv | sed -n '2p' > output/finalData.csv
