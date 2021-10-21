@@ -278,14 +278,22 @@ class _UserInfoState extends State<UserInfo> {
                   onPressed: () {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
-                    _formSubmitted();
-                    _setUserInfo(_usernameController.text, _garminIdController.text, _stravaIdController.text, dd_gender, num_vechical, type_vehicle);
-                    _generateUserProfile(_usernameController.text, _garminIdController.text, _stravaIdController.text, dd_gender, num_vechical, type_vehicle);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyHomePage(title: "Home")),
-                    );
+                    if (_formKey.currentState!.validate()) {
+                      _formSubmitted();
+                      _setUserInfo(
+                          _usernameController.text, _garminIdController.text,
+                          _stravaIdController.text, dd_gender, num_vechical,
+                          type_vehicle);
+                      _generateUserProfile(
+                          _usernameController.text, _garminIdController.text,
+                          _stravaIdController.text, dd_gender, num_vechical,
+                          type_vehicle);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyHomePage(title: "Home")),
+                      );
+                    }
                   },
                   child: const Text('Save'),
                 ),
