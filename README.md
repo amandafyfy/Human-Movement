@@ -1,17 +1,24 @@
-# CITS5206-Human-Movement
+# Data Integrator
 
-Installation Guide for Data Integrator
+Data Integrator have two versions:
 
-1) Download folder "Data Integrator with GUI"
+1) A GUI (Graphic User Interface) that integrate one user's data at a time.
+2) A CLI (Command Line Interface) that can integrate multiple users' data at a time.
+
+Please refer each version's user manual pdf document for user's instructions.
+
+# Installation Guide for Data Integrator
+
+1) Download folder "Data Integrator"
 2) Unzip the Zip File if it is downloaded as Zip.
 3) Open "Terminal" or "Command Prompt"
 4) Go to the folder in "Terminal" or "Command Prompt"
 5) Make firstSetup.command executable ( chmod u+x firstSetup.command )
 6) run "firstSetup.command" (./firstSetup.command)
 7) Open the application. (Double click runGUI.command OR type ./runGUI.command in Command Prompt/Terminal)
-8) "Sample Data" folder provides some sample data to test the application.
+8) "Real Test Data" folder provides some sample data to test the application.
 
-If your "Data Integrator with GUI" folder is in Desktop, series of commands in Terminal would like like this:
+If your "Data Integrator" folder is in Desktop, series of commands in Terminal would like like this:
 
 ![image](https://user-images.githubusercontent.com/56809330/133559238-6c7df3b5-892d-403f-8adf-d90c2b58d3e1.png)
 
@@ -20,8 +27,8 @@ Refer "Data Integrator User Manual" for user instructions.
 
 TEST INSTRUCTION:
 
-1) After initial setting, double-click runTest.command.
-2) Select all files in "Sample Data" folder
+1) After initial setting, double-click runTest.command in "runGUI" folder.
+2) Select all files in "Real Test Data" folder
 3) Click Open and let the test run. Observe Test results.
 
 File selection:
