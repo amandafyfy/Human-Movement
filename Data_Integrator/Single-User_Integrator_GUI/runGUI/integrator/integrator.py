@@ -39,8 +39,8 @@ class Integrator(QObject):
         rm -rf output
         rm -rf used\ data/
 
-        mv ../output runGUI/output
-        mv ../used\ data/ runGUI/used\ data/
+        mv ../output output
+        mv ../used\ data/ used\ data/
 
         mkdir output
 
