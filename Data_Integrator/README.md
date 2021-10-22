@@ -31,10 +31,12 @@ Select all files in "Real Test Data" folder
 Click Open and let the test run. Observe Test results.
 
 File selection:
+
 <img width="1280" alt="Screen Shot 2021-09-24 at 12 03 06 pm" src="https://user-images.githubusercontent.com/56809330/134616412-5184e035-e8a5-44da-a114-63f2198feaba.png">
 
 
 Test results should look like this:
+
 <img width="1280" alt="test-screenshot" src="https://user-images.githubusercontent.com/56809330/134832292-e2fb0781-f3d0-4c5d-b4bf-e72ee5dd984e.png">
 
 # Note: TrackerApp upload data to firebase storage. 
@@ -43,4 +45,4 @@ To download the data, please visit:
 
 https://console.firebase.google.com/project/human-movement-308d9/storage/human-movement-308d9.appspot.com/files/~2Ffiles
 
-( Request for access with gmail is required to gain permission for this link 
+( Request for access with gmail is required to gain permission for this link )
