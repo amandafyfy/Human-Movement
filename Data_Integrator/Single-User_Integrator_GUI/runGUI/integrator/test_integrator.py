@@ -63,12 +63,3 @@ def test_output_content():
     with open("../output/allBatches.csv") as f:
         txt = f.read().split("\n")
     assert txt[0] == "userId,unixTime,date,latitude,longitude,speed,mode_of_transport,anomalies,vis_lat,vis_long,vis_locName,vis_transport,vis_act1,vis_act_enjoyment1,vis_act2,vis_act_enjoyment2,vis_act3,vis_act_enjoyment3,vis_comment,poi_name,poi_lat,poi_long,garmin_lat,garmin_long,garmin_alt,lat_dif,lon_dif"
-
-
-def test_output_id():
-    # test using Real Test Data only
-    with open("../output/allBatches.csv") as f:
-        txt = f.read().split("\n")
-    id = txt[0][0]
-    for i in txt:
-        assert id == i[0]
