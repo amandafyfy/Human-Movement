@@ -1,33 +1,18 @@
-# CITS5206-Human-Movement
+# Human Movement Tracking and Analysis
 
-Installation Guide for Data Integrator
+Our client (researchers) want to find out the effect of human travelling habit on their fitness.
 
-1) Download folder "Data Integrator with GUI"
-2) Unzip the Zip File if it is downloaded as Zip.
-3) Open "Terminal" or "Command Prompt"
-4) Go to the folder in "Terminal" or "Command Prompt"
-5) Make firstSetup.command executable ( chmod u+x firstSetup.command )
-6) run "firstSetup.command" (./firstSetup.command)
-7) Open the application. (Double click runGUI.command OR type ./runGUI.command in Command Prompt/Terminal)
-8) "Sample Data" folder provides some sample data to test the application.
+This project is to help our client to collect Human Movement Data for their research.
 
-If your "Data Integrator with GUI" folder is in Desktop, series of commands in Terminal would like like this:
+This project consist of two parts:
 
-![image](https://user-images.githubusercontent.com/56809330/133559238-6c7df3b5-892d-403f-8adf-d90c2b58d3e1.png)
+1) An app for survey participants to provide their location data and related habits. 
+2) A PC software to preproccess and integrate the data from mobile app and smartwatch for easier use.
 
-Refer "Data Integrator User Manual" for user instructions.
+In the time being, Part 1's app only run on Android phone and Part 2's PC software only runs on Mac.
 
+Due to time constraint, we only choose one platform that is more suitable. 
+However, this project can be extended into cross-platforms in the future.
 
-TEST INSTRUCTION:
-
-1) After initial setting, double-click runTest.command.
-2) Select all files in "Sample Data" folder
-3) Click Open and let the test run. Observe Test results.
-
-File selection:
-<img width="1280" alt="Screen Shot 2021-09-24 at 12 03 06 pm" src="https://user-images.githubusercontent.com/56809330/134616412-5184e035-e8a5-44da-a114-63f2198feaba.png">
-
-Test results should look like this:
-<img width="1280" alt="test-screenshot" src="https://user-images.githubusercontent.com/56809330/134832292-e2fb0781-f3d0-4c5d-b4bf-e72ee5dd984e.png">
-
+For Part 2's PC software, we prioritize Mac because our client uses Mac.
 
