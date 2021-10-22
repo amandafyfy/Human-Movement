@@ -8,14 +8,22 @@ A CLI (Command Line Interface) that can integrate multiple users' data at a time
 Please refer each version's user manual pdf document for user's instructions.
 
 # Installation Guide for Data Integrator
-Download folder "Data Integrator"
-Unzip the Zip File if it is downloaded as Zip.
-Open "Terminal" or "Command Prompt"
-Go to the respective folder in "Terminal"
-Make firstSetup.command executable ( chmod u+x firstSetup.command )
-run "firstSetup.command" (./firstSetup.command)
-Open the application. (Double click runGUI.command OR type ./runGUI.command in Command Prompt/Terminal)
-"Real Test Data" folder provides some sample data to test the application.
+1.Download folder "Data Integrator"
+
+2.Unzip the Zip File if it is downloaded as Zip.
+
+3.Open "Terminal" or "Command Prompt"
+
+4.Go to the respective folder in "Terminal"
+
+5.Make firstSetup.command executable ( chmod u+x firstSetup.command )
+
+6.run "firstSetup.command" (./firstSetup.command)
+
+7.Open the application. (Double click runGUI.command OR type ./runGUI.command in Command Prompt/Terminal)
+
+8."Real Test Data" folder provides some sample data to test the application.
+
 Refer "Data Integrator User Manual" for user instructions.
 
 # TEST INSTRUCTION:
