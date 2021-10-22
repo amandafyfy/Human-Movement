@@ -1,32 +1,30 @@
 # Data Integrator
 Data Integrator have two versions:
 
-A GUI (Graphic User Interface) that integrate one user's data at a time. Folder name : "Single-User_Integrator_GUI"
+1. A GUI (Graphic User Interface) that integrate one user's data at a time. Folder name : "Single-User_Integrator_GUI"
 
-A CLI (Command Line Interface) that can integrate multiple users' data at a time. Folder name: "Multi-Users_Integrator_CLI"
+2. A CLI (Command Line Interface) that can integrate multiple users' data at a time. Folder name: "Multi-Users_Integrator_CLI"
 
 Please refer each version's user manual pdf document for user's instructions.
 
 # Installation Guide for Data Integrator
-1.Download folder "Data Integrator"
+1. Download folder "Data Integrator"
 
-2.Unzip the Zip File if it is downloaded as Zip.
+2. Unzip the Zip File if it is downloaded as Zip.
 
-3.Open "Terminal" or "Command Prompt"
+3. Open "Terminal" or "Command Prompt"
 
-4.Go to the respective folder in "Terminal"
+4. Go to the respective folder in "Terminal"
 
-5.Make firstSetup.command executable ( chmod u+x firstSetup.command )
+5. Make firstSetup.command executable ( chmod u+x firstSetup.command )
 
-6.run "firstSetup.command" (./firstSetup.command)
+6. Run "firstSetup.command" (./firstSetup.command)
 
-7.Open the application. (Double click runGUI.command OR type ./runGUI.command in Command Prompt/Terminal)
+7. Open the application. (Double click runGUI.command OR type ./runGUI.command in Command Prompt/Terminal)
 
-8."Real Test Data" folder provides some sample data to test the application.
+8. "Real Test Data" folder provides some sample data to test the application.
 
-Refer "Data Integrator User Manual" for user instructions.
-
-# TEST INSTRUCTION:
+# Test Instructions:
 
 After initial setting, double-click runTest.command in "runGUI" folder.
 Select all files in "Real Test Data" folder
