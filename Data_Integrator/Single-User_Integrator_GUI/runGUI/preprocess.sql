@@ -15,7 +15,11 @@ CASE
 	WHEN CAST(speed as DECIMAL(9,2)) > 19.2 AND CAST(speed as DECIMAL(9,2)) <= 20.0 THEN 'Bus'
 	WHEN CAST(speed as DECIMAL(9,2)) > 20.0 AND CAST(speed as DECIMAL(9,2)) <= 36.0 THEN 'Train'
 	ELSE 'UNKNOWN'
-END AS 'mode_of_transport'
+END AS 'mode_of_transport',
+CASE
+	WHEN CAST(speed as DECIMAL(9,2)) > 200 THEN 'LOC_ERROR'
+	ELSE '-'
+END AS 'anomalies'
 FROM records
 ORDER BY userId, unixTime;
 
