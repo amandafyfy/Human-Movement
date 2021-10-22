@@ -1,6 +1,13 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
+
+rm -rf runCLI/output
+rm -rf runCLI/used\ data/
+
+mv output runCLI/output
+mv used\ data/ runCLI/used\ data/
+
 mkdir runCLI/data
 folderCount=0
 
