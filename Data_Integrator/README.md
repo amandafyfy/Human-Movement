@@ -30,7 +30,7 @@ TEST INSTRUCTION:
 2) Select all files in "Real Test Data" folder
 3) Click Open and let the test run. Observe Test results.
 
-File selection:
+File selection:![image](https://user-images.githubusercontent.com/56809330/138410548-90ba4e8d-c157-4351-8b30-fb73bc8613a6.png)
 <img width="1280" alt="Screen Shot 2021-09-24 at 12 03 06 pm" src="https://user-images.githubusercontent.com/56809330/134616412-5184e035-e8a5-44da-a114-63f2198feaba.png">
 
 Test results should look like this:
