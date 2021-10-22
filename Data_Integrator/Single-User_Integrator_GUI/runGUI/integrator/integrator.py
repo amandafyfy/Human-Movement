@@ -36,6 +36,12 @@ class Integrator(QObject):
 
         cmd = '''
 
+        rm -rf output
+        rm -rf used\ data/
+
+        mv ../output runGUI/output
+        mv ../used\ data/ runGUI/used\ data/
+
         mkdir output
 
         for i in data/*records*.csv
