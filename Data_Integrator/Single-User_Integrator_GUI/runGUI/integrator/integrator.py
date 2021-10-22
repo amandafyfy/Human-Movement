@@ -90,6 +90,9 @@ class Integrator(QObject):
             sqlite3 < merge_garmin.sql
         fi
 
+        cat output/finalData.csv >> output/allBatches.csv
+        printf "END OF BATCH \n" >> output/allBatches.csv
+
         rm data/visited_places_formatted.csv
         echo "Data Integration Completed"
 
@@ -97,9 +100,9 @@ class Integrator(QObject):
         echo SET USER ID
         echo $userID
 
-	timeStamp=$(date +%Y-%m-%d_%H%M%S)
-	echo SET TIMESTAMP
-	echo $timeStamp
+        timeStamp=$(date +%Y-%m-%d_%H%M%S)
+        echo SET TIMESTAMP
+        echo $timeStamp
 
         mkdir output/${userID}/
         mkdir output/${userID}/${userID}_${timeStamp}
@@ -115,21 +118,21 @@ class Integrator(QObject):
         mv data/*.json used\ data/${userID}/${userID}_${timeStamp}/
         mv data/*.gpx used\ data/${userID}/${userID}_${timeStamp}/
 
-	rm -rf data
-	mv output ..
-	mv used\ data/ ..
+        rm -rf data
+        mv output ..
+        mv used\ data/ ..
 
         echo "Used files are moved to "used data" folder"
 
-	echo "#################################"
-	echo "#################################"
-	echo "#################################"
-	echo "## DATA INTEGRATION COMPLETED. ##"
-	echo "#################################"
-	echo "########## THANK YOU! ###########"
-	echo "#################################"
-	echo "#################################"
-	echo "#################################"
+        echo "#################################"
+        echo "#################################"
+        echo "#################################"
+        echo "## DATA INTEGRATION COMPLETED. ##"
+        echo "#################################"
+        echo "########## THANK YOU! ###########"
+        echo "#################################"
+        echo "#################################"
+        echo "#################################"
 
         '''
         os.system(cmd)
