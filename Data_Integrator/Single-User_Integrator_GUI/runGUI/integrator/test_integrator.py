@@ -44,7 +44,7 @@ def test_integrateButton(app):
 def test_click(app, qtbot):
     qtbot.mouseClick(app.loadFilesButton, QtCore.Qt.LeftButton)
     qtbot.mouseClick(app.integrateButton, QtCore.Qt.LeftButton)
-    time.sleep(2)
+    time.sleep(5)
 
 
 def test_output_exist():
