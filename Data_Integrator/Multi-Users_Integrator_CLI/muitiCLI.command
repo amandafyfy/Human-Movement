@@ -27,6 +27,8 @@ rm -rf runCLI/data
 mv runCLI/output .
 mv runCLI/used\ data/ .
 
+rm -rf multi-data/*
+
 echo " "
 echo " "
 echo " "
